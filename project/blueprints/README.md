@@ -1,0 +1,20 @@
+# Replacements Patterns
+
+Nitro provides the following [Lodash](https://lodash.com/docs#template) replacement patterns for your blueprints. 
+
+```
+<%= user.name %>		// Your name, eg. John Doe
+<%= user.email %>		// Your email, eg. john@doe.com
+
+<%= component.name %>	// Component name, eg. Main Navigation
+<%= component.js %> 	// Component name for use in JS files, eg. MainNavigation
+<%= component.css %> 	// Component name for use in CSS files, eg. main-navigation
+<%= component.prefix %>	// CSS class prefix, eg. o
+
+<%= modifier.name %>	// Modifier name, eg. Highlight 
+<%= modifier.css %> 	// Modifier name for use in CSS files, eg. highlight
+
+<%= decorator.name %>	// Decorator name, eg. Highlight 
+<%= decorator.js %> 	// Decorator name for use in JS files, eg. Highlight
+
+```

@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
-	path = require('path'), 
-	precompile = require('gulp-sass'), 
+	path = require('path'),
+	precompile = require('gulp-sass'),
 	minify = require('gulp-minify-css'),
 	autoprefixer = require('gulp-autoprefixer'),
 	install = require('gulp-install'),
@@ -75,7 +75,7 @@ gulp.task('compile-css', ['install-bower'], function () {
 					.pipe(plumber())
 					.pipe(header(imports))
 					.pipe(cache(asset.name))
-					.pipe(precompile())
+					.pipe(precompile().on('error', precompile.logError))
 					.pipe(autoprefixer({
 						browsers: ['> 1%', 'last 2 versions', 'ie 9', 'android 4', 'Firefox ESR', 'Opera 12.1'],
 						cascade: true
@@ -101,7 +101,7 @@ gulp.task('compile-js', ['install-bower'], function () {
 	var promises = [];
 
 	assets.forEach(function (asset) {
-		
+
 		promises.push(new Promise(function(resolve) {
 			gulp.src(asset.src)
 				.pipe(plumber())

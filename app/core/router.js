@@ -2,7 +2,7 @@ var path = require('path'),
 	fs = require('fs'),
 	cfg = require('./config'),
 	dot = require('dot-object'),
-	merge = require('merge'),
+	extend = require('extend'),
 	express = require('express'),
 	router = express.Router({
 		caseSensitive: false,
@@ -85,21 +85,23 @@ function getView(req, res, next) {
 				) : false;
 
 				if (customDataPath && fs.existsSync(customDataPath)) {
-					merge.recursive(data, JSON.parse(fs.readFileSync(customDataPath, 'utf8')));
+					extend(true, data, JSON.parse(fs.readFileSync(customDataPath, 'utf8')));
 				}
 				else if (fs.existsSync(dataPath)) {
-					merge.recursive(data, JSON.parse(fs.readFileSync(dataPath, 'utf8')));
+					extend(true, data, JSON.parse(fs.readFileSync(dataPath, 'utf8')));
 				}
 
 				if (Object.keys(req.query).length !== 0) { // handle query string parameters
 					var reqQuery = JSON.parse(JSON.stringify(req.query)); // simple clone
 					dot.object(reqQuery);
-					merge.recursive(data, reqQuery);
+					extend(true, data, reqQuery);
 					data._query = reqQuery;
 				}
 
+				res.locals = data;
+
 				// render
-				res.render(tplPath, data);
+				res.render(tplPath);
 				rendered = true;
 			}
 		}
@@ -115,9 +117,15 @@ router.get('/:view', getView);
 /**
  * everything else gets a 404
  */
-router.use(function (req, res, next) {
+router.use(function (req, res) {
 	res.status(404);
-	res.render('404');
+	res.render('404', function (err, html) {
+		if (err) {
+			res.send('Not Found');
+		}
+
+		res.send(html);
+	});
 });
 
 module.exports = router;

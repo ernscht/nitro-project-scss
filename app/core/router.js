@@ -6,7 +6,7 @@ var path = require('path'),
 	express = require('express'),
 	router = express.Router({
 		caseSensitive: false,
-		strict: false
+		strict:        false
 	});
 
 /**
@@ -95,7 +95,7 @@ function getView(req, res, next) {
 					var reqQuery = JSON.parse(JSON.stringify(req.query)); // simple clone
 					dot.object(reqQuery);
 					extend(true, data, reqQuery);
-					data._query = reqQuery;
+					data._query = reqQuery; // save query for use in components
 				}
 
 				res.locals = data;
@@ -118,12 +118,12 @@ router.get('/:view', getView);
  * everything else gets a 404
  */
 router.use(function (req, res) {
+	res.locals = {pageTitle: '404 - Not Found'};
 	res.status(404);
 	res.render('404', function (err, html) {
 		if (err) {
-			res.send('Not Found');
+			res.send('404 - Not Found');
 		}
-
 		res.send(html);
 	});
 });

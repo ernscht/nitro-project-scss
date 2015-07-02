@@ -2,25 +2,30 @@
  * Simple Handlebars Translation Helper
  *
  * @dependency: https://www.npmjs.com/package/i18next
- * http://i18next.com/
+ * http://i18next.com/node/
  *
  * @examples
- * translation file in project/locales/default/translation.json
+ * default translation file in project/locales/default/translation.json
  *
- * {{t "test.example"}}
- * {{t "test.interpolation1" "alphabet" "a" "l" "p"}}
- * {{t "test.interpolation2" "alphabet" "e" "t"}}
- * {{t "test.interpolation3" word="alphabet" one="a"}}
+ * {{t "test.example.string"}}
+ * {{t "test.example.sprintf" "alphabet" "a" "l" "p"}}
+ * {{t "test.example.interpolation1" "alphabet" "e" "t"}}
+ * {{t "test.example.interpolation2" word="alphabet" one="a"}}
+ *
+ * It is also possible to use other translation features from i18next (http://i18next.com/node/pages/doc_features.html)
  */
 var i18n = require('i18next'),
 	hbs = require('hbs');
 
-var options = {
-	fallbackLng: 'default',
-	resGetPath: 'project/locales/__lng__/__ns__.json',
-	debug: false
-};
-i18n.init(options);
+// already initialised in ../core/i18n.js
+//var options = {
+//	//supportedLngs: ['en', 'de'],
+//	//lng: 'de-CH',
+//	fallbackLng: 'default',
+//	resGetPath: 'project/locales/__lng__/__ns__.json',
+//	debug: false
+//};
+//i18n.init(options);
 
 module.exports = function(key) {
 
@@ -29,7 +34,7 @@ module.exports = function(key) {
 		args = [].slice.call(arguments),
 		values = args.slice(1, -1),
 		hash = args.slice(-1)[0].hash,
-		result = i18n.t.apply(i18n, args), // default translations
+		result = i18n.t.apply(i18n, args), // default translations (i18next)
 		regExp;
 
 	// custom replaces from arguments

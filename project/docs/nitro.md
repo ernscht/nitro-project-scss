@@ -1,5 +1,12 @@
 # Nitro Usage
 
+Nitro is a Node.js application for simple and complex frontend development with a tiny footprint.  
+It provides a proven but flexible structure to develop your frontend code, even in a large team.  
+Keep track of your code with a modularized frontend. This app and the suggested concepts could help - 
+[atomic design](http://bradfrost.com/blog/post/atomic-web-design/), [BEM](https://en.bem.info/method/definitions/) 
+and [terrific](http://terrifically.org).  
+Nitro is simple, fast and flexible. Use this app for all your frontend work.
+
 ## Features
 
 * Simple project structure
@@ -10,12 +17,23 @@
 * Bower support
 * Yeoman component generator
 
+## Preparation
+
+This application was created by the yeoman [nitro generator](https://www.npmjs.com/package/generator-nitro).  
+Before using, you need of course [node and npm](https://nodejs.org/) installed.  
+And also you need the yeoman [nitro generator](https://www.npmjs.com/package/generator-nitro) 
+and some dependencies installed globally.
+
+    npm install -g yo bower gulp jasmine karma-cli generator-nitro
+
 ## Daily Work - Creating Components & Pages
 
 ### Creating Components
 
-Components are created in the `components` folder. A component is an encapsulated block of markup with corresponding styles, scripts and data.  
-For a better overview it is useful to define different types of components. It is recommended to make subfolders like `atoms`, `molecules` & `organisms`
+Components are created in the `components` folder. A component is an encapsulated block of markup 
+with corresponding styles, scripts and data.  
+For a better overview it is useful to define different types of components. It is recommended to make 
+subfolders like `atoms`, `molecules` & `organisms`  
 A component uses the following structure:
 
     /Example
@@ -24,17 +42,14 @@ A component uses the following structure:
     /Example/js/example.js
     /Example/_data/example.json
 
-
 Terrific modifiers & decorators are created using the following conventions:
 
     /Example/css/modifier/example-<modifier>.css
     /Example/js/decorator/example-<decorator>.js
 
-
 Different data variantions has to be placed in the `_data` folder:
 
     /Example/_data/example-variant.json
-
 
 ### Creating Components with yo
 
@@ -43,6 +58,7 @@ Different data variantions has to be placed in the `_data` folder:
 ### Using gulp
 
 #### Starting the app
+
 The Nitro app will run on port `8080` by default, the proxy on `8081` (only run with `develop` task). If you want the
 app to run on another port put them before the gulp task like this:
 
@@ -57,10 +73,6 @@ This works a bit different on **Windows**. Use the following commands in prompt:
     set PORT=8000 && set PROXY=8001 && gulp develop
     set PORT=3000 && gulp production
 
-#### Components Configuration
-
-tbd
-
 ### Creating pages
 
 Create a new `*.html` file in the `views` folder. You can make as many subfolders as you want.
@@ -69,7 +81,8 @@ Create a new `*.html` file in the `views` folder. You can make as many subfolder
     /views/content.html
     /views/content/variant.html
 
-Your new page can then be called by the according URL (with or without an extension). Subfolders are represented with a dash.
+Your new page can then be called by the according URL (with or without an extension). 
+Subfolders are represented with a dash.
 
     http://localhost:8080/index
     http://localhost:8080/content
@@ -102,7 +115,8 @@ Render a partial (HTML snippet). Partials are placed in `views/_partials/` as `*
 #### Data per view
 
 You may pass data to your templates (view, partial, component) per view.  
-Put a file with the same name as the view in the folder `views/_data/` with the file extension `.json`. (Use the same folder structure as in `views`)
+Put a file with the same name as the view in the folder `views/_data/` with the file extension `.json`. 
+(Use the same folder structure as in `views`)
 
     /views/index.html
     /views/_data/index.json
@@ -118,9 +132,13 @@ It's also possilbe to use a custom data file by requesting with a query param `?
     /views/_data/index-test.json
     http://localhost:8080/index?_data=index-test
 
+#### Data per component
+
+Component data will overwrite data from views. (Use as described above.)
+
 #### Data in request
 
-You may overwrite data in request parameters.
+You may overwrite data from views & components in request parameters.
 
 `?pageTitle=Testpage` will overwrite the the data for the handlebars expression `{{pageTitle}}`
 
@@ -142,36 +160,101 @@ You can configure the include order of your assets by defining patterns in `conf
             "!assets/css/somefile.*",
             "assets/css/cssreset.css",
             "assets/css/*.*",
-            "components/modules/*/css/*.*",
-            "components/modules/*/css/modifier/*.*"
+            "components/**/css/*.*",
+            "components/**/css/modifier/*.*"
         ],
         "app.js": [
             "!assets/js/somefile.js",
-            "assets/js/jquery-1.11.2.min.js",
-            "assets/js/terrific-2-1.0.js",
+            "assets/vendor/terrific/dist/terrific.min.js",
+            "assets/vendor/terrific/dist/terrific.min.js",
             "assets/js/*.js",
-            "components/modules/*/js/*.js",
-            "components/modules/*/js/decorator/*.js"
+            "components/**/js/*.js",
+            "components/**/js/decorator/*.js"
         ]
     }
 
 #### Pattern
 
-The matching patterns follow the standard glob patterns.
-Glob patterns are similar to regular expression but simplified. They are used by several shells.
-You should always try to keep the patterns simple. Usually you only need the asterisk `*` which
-matches zero or more characters.
+The matching patterns follow the standard node glob patterns.  
+Glob patterns are similar to regular expression but simplified. They are used by several shells.  
+You should always try to keep the patterns simple. Usually you only need the asterisks `*` `**` 
+and the exclamation mark `!` for negation.
 
-You can read more on standard glob patterns on [php.net](http://www.php.net/manual/en/function.glob.php) and
-[cowburn.info](http://cowburn.info/2010/04/30/glob-patterns/).
+You can read more on the standard [node glob patterns](https://github.com/isaacs/node-glob#glob-primer).
 
-#### Other Asset Files
+#### Special Pattern Prefixes
+
+* You can negate a pattern by starting with an exclamation mark `!`.
+  `!` = exclude pattern
+* Define all your dependencies for the compiling-process with the `+` prefix
+  `+` = exclude file but prepend it to every compile call for files with the same file extension.
+
+The order of these special patterns does not matter.
+
+#### Examples
+
+* `"!components/*/Test*"          Exclude all components starting with `Test`
+* `"!**/*-test.*"`                Exclude all filenames ending with `-test`.
+* `"+assets/css/mixins.less"`     Exclude `assets/css/mixins.less` but prepend to every compile call of every .less file
+
+### Other Asset Files
 
 You can configure as many different assets as you wish.
 
     "brand.css": [
         "assets/css/reset.css",
         ...
+
+## Translations
+
+Nitro uses [i18next](http://i18next.com/node/index.html) as Translation Library 
+and gives you the Handlebars helper `{{t}}`.  
+Translations are stored in `project/locales/[lang]/translation.json`.
+
+Express Middleware configuration:
+
+* Fallback language: `default`
+* Language detection from request header
+* Language switch with query parameter: `?lang=de`
+
+### Translation handlebars helper
+
+The helper combines the given [library features](http://i18next.com/node/pages/doc_features.html) with a second system of translation features.
+
+The library needs one object to transfer data and uses two underscores as interpolation pre- and suffixes 
+or uses `%s` placeholders for sprintf functionality.
+
+Some examples:
+
+    data = {
+       name: "developer"
+    }
+    
+    "test": {
+        "example": {
+            "string" : "gold",
+            "nested": "All that glitters is not $t(test.example.string).",
+            "sprintf" : "The first three letters of %s are: %s, %s and %s",
+            "interpolation" : "Hello __name__"
+        }
+    }
+
+    {{t "test.example.string"}}
+    {{t "test.example.nested"}}
+    {{t "test.example.sprintf" "alphabet" "a" "l" "p"}}
+    {{t "test.example.interpolation" data}}
+
+The Second system uses brackets as interpolation pre- and suffixes and numbered or named placeholders:
+
+    "test": {
+        "example": {
+            "interpolation1" : "The last two letters of {1} are: {3} and {2}",
+            "interpolation2" : "The first letter of {word} is: {one}"
+        }
+    }
+    
+    {{t "test.example.interpolation1" "alphabet" "e" "t"}}
+    {{t "test.example.interpolation2" word="alphabet" one="a"}}
 
 ## Conventions
 
@@ -206,6 +289,7 @@ Note that camel case ComponentNames are represented in CSS with dashes.
     AdminNavMain -> T.Module.AdminNavMain -> m-admin-nav-main
     
 ### Custom Handlebars helpers
+
 Custom handlebars will be automatically loaded if put into to `project/helpers` directory. An example could look like 
 this:
 
@@ -217,6 +301,7 @@ The helper name will automatically match the filename, so if you name your file 
 `foo`.
 
 ### JSON Endpoints
+
 If you need to mock service endpoints, you can put JSON files into a directory inside the `/public` directory as 
 those are directly exposed.
 
@@ -224,6 +309,7 @@ those are directly exposed.
 requests.
 
 ### Custom Routes
+
 If you need more custom functionality in endpoints you can put your custom routes with their logic into the 
 `project/routes` directory. The filename is irrelevant and the content can look like this:
 
@@ -248,7 +334,9 @@ If you need more custom functionality in endpoints you can put your custom route
 These routes will be loaded into Nitro automatically.
 
 ### Using another Template Engine
-If you don't want to use [Handlebars](http://handlebarsjs.com/) as Nitro's Template Engine you can configure your own Engine.
+
+If you don't want to use [Handlebars](http://handlebarsjs.com/) as Nitro's Template Engine 
+you can configure your own Engine.  
 This example shows how to replace Handlebars with [Nunjucks](https://mozilla.github.io/nunjucks/) as an example.
 
 All these steps need to be performed in `server.js`.

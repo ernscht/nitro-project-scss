@@ -75,10 +75,7 @@ gulp.task('compile-css', function () {
 					.pipe(plumber())
 					.pipe(header(imports))
 					.pipe(cache(asset.name))
-					.pipe(precompile().on('error', function(err) {
-						precompile.logError(err);
-						this.emit('end');
-					}))
+					.pipe(precompile().on('error', precompile.logError ))
 					.pipe(autoprefixer({
 						browsers: ['> 1%', 'last 2 versions', 'ie 9', 'android 4', 'Firefox ESR', 'Opera 12.1'],
 						cascade: true
@@ -158,7 +155,7 @@ gulp.task('minify-img', function () {
 			optimizationLevel: 7,
 			progressive: true,
 			multipass: true,
-			svgoPlugins: [{cleanupIDs: false}, {removeUnknownsAndDefaults: false}, {removeViewBox: false}],
+			svgoPlugins: [{collapseGroups: false}, {cleanupIDs: false}, {removeUnknownsAndDefaults: false}, {removeViewBox: false}],
 			use: [pngquant()]
 		}))
 		.pipe(gulp.dest('public/assets/img'));

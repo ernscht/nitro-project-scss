@@ -103,6 +103,14 @@ Render the Example component. (file: `example.html`, data-file: `example.json`)
 Render a "variant" from the Example component. (file: `example.html`, data-file: `example-variant.json`)
 
     {{component 'Example' 'example-variant'}}
+    
+Another possibility to use the component helper is by providing hash options.
+
+    {{component name='Example' data='example-variant'}}
+
+...and if you really need this you may provide a second template file. (file: `example-2.html`, data-file: `example-variant.json`)
+
+    {{component name='Example' data='example-variant' template='example-2'}}
 
 ### Render Partials
 
@@ -132,9 +140,14 @@ It's also possilbe to use a custom data file by requesting with a query param `?
     /views/_data/index-test.json
     http://localhost:8080/index?_data=index-test
 
+#### Dynamic view data
+
+If you want to use dynamic view data (i.e. using data from a database or data which is available in different views), 
+you can define those "routes" in the directory [`project/viewData`](project/viewData/). 
+
 #### Data per component
 
-Component data will overwrite data from views. (Use as described above.)
+Component data will overwrite data from views. (Use as described above)
 
 #### Data in request
 
@@ -311,27 +324,7 @@ requests.
 ### Custom Routes
 
 If you need more custom functionality in endpoints you can put your custom routes with their logic into the 
-`project/routes` directory. The filename is irrelevant and the content can look like this:
-
-    function getData(req, res, next) {
-        return res.json({
-            data: 'empty'
-        });
-    }
-    
-    function postData(req, res, next){
-        return res.json({
-            data: req.body
-        });
-    }
-    
-    exports = module.exports = function(app){
-        app.route('/api/data')
-            .get(getData)
-            .post(postData);
-    };
-
-These routes will be loaded into Nitro automatically.
+[`project/routes` directory](project/routes/).
 
 ### Using another Template Engine
 

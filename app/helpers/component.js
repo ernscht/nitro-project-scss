@@ -2,34 +2,44 @@ var fs = require('fs'),
 	hbs = require('hbs'),
 	path = require('path'),
 	extend = require('extend'),
-	cfg = require('../core/config.js');
+	cfg = require('../core/config'),
+	utils = require('../core/utils');
 
 module.exports = function () {
 
 	var logAndRenderError = function logAndRenderError(e) {
 		console.info(e.message);
 		return new hbs.handlebars.SafeString(
-			'<p class="t-nitro-error">' + e.message + '</p>'
+			'<p class="nitro-msg nitro-msg--error">' + e.message + '</p>'
 		);
-	};
-	var fileExistsSync = function fileExistsSync(filename) {
-		// Substitution for the deprecated fs.existsSync() method @see https://nodejs.org/api/fs.html#fs_fs_existssync_path
-		try {
-			fs.accessSync(filename);
-			return true;
-		}
-		catch (ex) {
-			return false;
-		}
 	};
 
 	try {
 		var context = arguments[arguments.length - 1],
-			contextDataRoot = context && context.data && context.data.root ? context.data.root : {}, // default component data from controller & view
-			componentData = {},
+			contextDataRoot = context.data && context.data.root ? context.data.root : {},   // default component data from controller & view
 			name = 'string' === typeof arguments[0] ? arguments[0] : context.hash.name,
-			templateFile = context.hash.template || name.replace(/\s/g, '').replace(/-/g, '').toLowerCase(),
-			dataFile = 'string' === typeof arguments[1] ? arguments[1].toLowerCase() : context.hash.data || name.replace(/\s/g, '').replace(/-/g, '').toLowerCase();
+			folder = name.replace(/[^A-Za-z0-9-]/g, ''),
+			templateFile = context.hash && context.hash.template ? context.hash.template : folder.toLowerCase(),
+			dataFile = folder.toLowerCase(),                                                           // default data file
+			passedData = null,                                                                         // passed data to component helper
+			componentData = {};                                                                        // collected component data
+
+		if (arguments.length >= 3) {
+			if ('object' === typeof arguments[1]) {
+				passedData = arguments[1];
+			}
+			else if('string' === typeof arguments[1]) {
+				dataFile = arguments[1].replace(/\.json$/i, '').toLowerCase();
+			}
+		}
+		else if (context.hash && context.hash.data) {
+			if ('object' === typeof context.hash.data) {
+				passedData = context.hash.data;
+			}
+			else if ('string' === typeof context.hash.data) {
+				dataFile = context.hash.data;
+			}
+		}
 
 		for (var key in cfg.nitro.components) {
 			if (cfg.nitro.components.hasOwnProperty(key)) {
@@ -39,18 +49,18 @@ module.exports = function () {
 						cfg.nitro.base_path,
 						component.path,
 						'/',
-						name,
+						folder,
 						'/',
 						templateFile + '.' + cfg.nitro.view_file_extension
 					);
 
-					if (fileExistsSync(templatePath)) {
+					if (utils.fileExistsSync(templatePath)) {
 						var jsonFilename = dataFile + '.json',
 							jsonPath = path.join(
 								cfg.nitro.base_path,
 								component.path,
 								'/',
-								name,
+								folder,
 								'/_data/',
 								jsonFilename
 							);
@@ -60,7 +70,10 @@ module.exports = function () {
 								extend(true, componentData, contextDataRoot._locals);
 							}
 
-							if (fileExistsSync(jsonPath)) {
+							if (passedData) {
+								extend(true, componentData, passedData);
+							}
+							else if (utils.fileExistsSync(jsonPath)) {
 								extend(true, componentData, JSON.parse(fs.readFileSync(jsonPath, 'utf8')));
 							}
 
@@ -77,13 +90,12 @@ module.exports = function () {
 						catch (e) {
 							throw new Error('Parse Error in Component ' + name + ': ' + e.message);
 						}
-
 					}
 				}
 			}
 		}
 
-		throw new Error('Component ' + name + ' not found.');
+		throw new Error('Component `' + name + '` with template file `'+ templateFile + '.' + cfg.nitro.view_file_extension + '` not found in folder `' + folder + '`.');
 	}
 	catch (e) {
 		return logAndRenderError(e);

@@ -19,12 +19,29 @@ Nitro is simple, fast and flexible. Use this app for all your frontend work.
 
 ## Preparation
 
-This application was created by the yeoman [nitro generator](https://www.npmjs.com/package/generator-nitro).  
-Before using, you need of course [node and npm](https://nodejs.org/) installed.  
-And also you need the yeoman [nitro generator](https://www.npmjs.com/package/generator-nitro) 
+This application was created by the yeoman generator for nitro.  
+Before using, you need of course [node and npm](https://nodejs.org/) installed. 
+Currently supported node.js versions are 0.12.x, and 4.x. So everything between should work.  
+And also you need the yeoman [generator-nitro](https://www.npmjs.com/package/generator-nitro) 
 and some dependencies installed globally.
 
     npm install -g yo bower gulp jasmine karma-cli generator-nitro
+
+## Starting the app
+
+The Nitro app will run on port `8080` by default, the proxy on `8081` (only run with `develop` task). If you want the
+app to run on another port put them before the gulp task like this:
+
+    PORT=8000 PROXY=8001 gulp develop
+
+The port to be used in production can be set the same way:
+ 
+    PORT=3000 node server.js
+
+This works a bit different on **Windows**. Use the following commands in prompt:
+ 
+    set PORT=8000 && set PROXY=8001 && gulp develop
+    set PORT=3000 && node server.js
 
 ## Daily Work - Creating Components & Pages
 
@@ -47,31 +64,13 @@ Terrific modifiers & decorators are created using the following conventions:
     /Example/css/modifier/example-<modifier>.css
     /Example/js/decorator/example-<decorator>.js
 
-Different data variantions has to be placed in the `_data` folder:
+Different data variations has to be placed in the `_data` folder:
 
     /Example/_data/example-variant.json
 
 ### Creating Components with yo
 
     yo nitro:component
-
-### Using gulp
-
-#### Starting the app
-
-The Nitro app will run on port `8080` by default, the proxy on `8081` (only run with `develop` task). If you want the
-app to run on another port put them before the gulp task like this:
-
-    PORT=8000 PROXY=8001 gulp develop
-
-The port to be used in production can be set the same way:
- 
-    PORT 3000 gulp production 
-
-This works a bit different on **Windows**. Use the following commands in prompt:
- 
-    set PORT=8000 && set PROXY=8001 && gulp develop
-    set PORT=3000 && gulp production
 
 ### Creating pages
 
@@ -111,6 +110,11 @@ Another possibility to use the component helper is by providing hash options.
 ...and if you really need this you may provide a second template file. (file: `example-2.html`, data-file: `example-variant.json`)
 
     {{component name='Example' data='example-variant' template='example-2'}}
+
+There also is a possibility to pass data to subcomponents by providing a data object as second parameter or as hash option.
+
+    {{component 'Example' exampleContent}}
+    {{component 'Example' data=exampleContent}}
 
 ### Render Partials
 
@@ -155,7 +159,7 @@ You may overwrite data from views & components in request parameters.
 
 `?pageTitle=Testpage` will overwrite the the data for the handlebars expression `{{pageTitle}}`
 
-It's also possilbe to use dot notation for object data:
+It's also possible to use dot notation for object data:
 
 `?page.title=Testpage` will overwrite the value for `{{page.title}}` 
 
@@ -206,7 +210,7 @@ The order of these special patterns does not matter.
 
 #### Examples
 
-* `"!components/*/Test*"          Exclude all components starting with `Test`
+* `"!components/*/Test*"`         Exclude all components starting with `Test`
 * `"!**/*-test.*"`                Exclude all filenames ending with `-test`.
 * `"+assets/css/mixins.less"`     Exclude `assets/css/mixins.less` but prepend to every compile call of every .less file
 
@@ -338,8 +342,9 @@ All these steps need to be performed in `server.js`.
 2. Remove the line `app.engine(cfg.nitro.view_file_extension, hbs.__express);`
 3. Configure nunjucks as Express' Template Engine with the following block:
 
+
     nunjucks.configure(
-        cfg.nitro.view_directory,
+        cfg.nitro.base_path + cfg.nitro.view_directory,
         {
             autoescape: true,
             express: app
@@ -370,7 +375,7 @@ Nitro uses [Gulp](http://gulpjs.com/) under the hood and can therefore be used o
 
 The following packages are always installed by the [app](#name) generator:
 
-* [jQuery 2.1.4](http://jquery.com/)
+* [jQuery 2.2.0](http://jquery.com/)
 * [TerrificJS 3.0.0](https://github.com/brunschgi/terrificjs)
 
 All of these can be updated with `bower update` as new versions are released.

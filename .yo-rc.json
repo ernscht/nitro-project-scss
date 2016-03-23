@@ -5,5 +5,12 @@
     "jscompiler": "JavaScript",
     "viewExtension": "html",
     "clientTemplates": true
+  },
+  "generator-nitro-dev": {
+    "name": "nitro-scss",
+    "preprocessor": "scss",
+    "jscompiler": "JavaScript",
+    "viewExtension": "html",
+    "clientTemplates": true
   }
 }

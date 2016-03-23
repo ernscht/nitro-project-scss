@@ -2,6 +2,8 @@
   "generator-nitro": {
     "name": "nitro-scss",
     "preprocessor": "scss",
-    "jscompiler": "JavaScript"
+    "jscompiler": "JavaScript",
+    "viewExtension": "html",
+    "clientTemplates": true
   }
 }

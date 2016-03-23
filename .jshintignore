@@ -1,1 +1,3 @@
 assets/vendor/**/*.js
+components/**/template/*.js
+components/**/template/partial/*.js

@@ -34,11 +34,17 @@ function getSourceFiles(ext) {
 	return assets;
 }
 
+function reloadConfig() {
+	cfg = cfg.reload();
+	return cfg;
+}
+
 function getTask(task) {
 	return require('./' + task)(gulp, plugins);
 }
 
 module.exports = {
 	getSourceFiles: getSourceFiles,
+	reloadConfig: reloadConfig,
 	getTask: getTask
 };

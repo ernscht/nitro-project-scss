@@ -2,7 +2,8 @@ var gulp = require('gulp');
 var getTask = require('./gulp/utils').getTask;
 
 gulp.task('compile-css', getTask('compile-css'));
-gulp.task('compile-js', getTask('compile-js'));
+gulp.task('compile-templates', getTask('compile-templates'));
+gulp.task('compile-js', ['compile-templates'], getTask('compile-js'));
 gulp.task('minify-css', ['compile-css'], getTask('minify-css'));
 gulp.task('minify-js', ['compile-js'], getTask('minify-js'));
 gulp.task('minify-img', getTask('minify-img'));

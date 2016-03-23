@@ -16,6 +16,7 @@ Nitro is simple, fast and flexible. Use this app for all your frontend work.
 * Jasmine tests with Karma test runner
 * Bower support
 * Yeoman component generator
+* [Client side templates](client-templates.md)
 
 ## Preparation
 
@@ -121,6 +122,14 @@ There also is a possibility to pass data to subcomponents by providing a data ob
 Render a partial (HTML snippet). Partials are placed in `views/_partials/` as `*.html` files (e.g. `head.html`).
 
     {{> head}}
+
+### Render Placeholders
+
+Using a placeholder is another way to output some markup. Placeholders are placed in a folder inside `views/_placeholders/` as `*.html` files.  
+The following two examples do the same and render the file `Content/example.html` from `views/_placeholders/`.
+
+    {{placeholder 'Content' 'example'}}
+    {{placeholder name='Content' template='example'}}
 
 ### Passing data
 
@@ -375,15 +384,13 @@ Nitro uses [Gulp](http://gulpjs.com/) under the hood and can therefore be used o
 
 The following packages are always installed by the [app](#name) generator:
 
-* [jQuery 2.2.0](http://jquery.com/)
-* [TerrificJS 3.0.0](https://github.com/brunschgi/terrificjs)
+* [jQuery 2.2.2](http://jquery.com/)
+* [TerrificJS 3.0.0-beta.9](https://github.com/brunschgi/terrificjs)
+* [Handlebars 4.0.5](https://github.com/components/handlebars.js)
 
 All of these can be updated with `bower update` as new versions are released.
 
 ## Credits
 
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.2.10).  
 Nitro is an alternative to [Terrific Micro](https://github.com/namics/terrific-micro) which is developed by Namics AG.
-
-## License
-
-Released under the [MIT license](LICENSE)

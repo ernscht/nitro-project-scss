@@ -392,5 +392,5 @@ All of these can be updated with `bower update` as new versions are released.
 
 ## Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.2.10).  
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.3.0).  
 Nitro is an alternative to [Terrific Micro](https://github.com/namics/terrific-micro) which is developed by Namics AG.

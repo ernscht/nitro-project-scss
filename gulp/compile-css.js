@@ -29,6 +29,13 @@ module.exports = function (gulp, plugins) {
 					.pipe(plugins.plumber())
 					.pipe(plugins.cached(asset.name))
 					.pipe(plugins.sourcemaps.init({loadMaps: true}))
+					.pipe(plugins.stylelint({
+						failAfterError: false,
+						syntax: 'scss',
+						reporters: [
+							{formatter: 'string', console: true}
+						]
+					}))
 					.pipe(plugins.header(imports, false))
 					.pipe(plugins.sass().on('error', plugins.sass.logError ))
 					.pipe(plugins.postcss(processors))

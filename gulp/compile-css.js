@@ -2,12 +2,12 @@ var utils = require('./utils');
 var Promise = require('es6-promise').Promise;
 var globby = require('globby');
 var fs = require('fs');
-var browserSync = require('browser-sync');
+var browserSync = utils.getBrowserSyncInstance();
 var autoprefixer = require('autoprefixer');
 
 module.exports = function (gulp, plugins) {
 	return function () {
-		var assets = utils.getSourceFiles('.css');
+		var assets = utils.getSourcePatterns('css');
 		var promises = [];
 		var browserCompatibility = utils.getBrowserCompatibility();
 
@@ -46,7 +46,7 @@ module.exports = function (gulp, plugins) {
 					.on('end', function () {
 						resolve();
 					})
-					.pipe(browserSync.reload({stream: true}));
+					.pipe(browserSync.stream());
 			}));
 		});
 

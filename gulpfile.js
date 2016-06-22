@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var getTask = require('./gulp/utils').getTask;
 
+gulp.task('install-githooks', getTask('install-githooks'));
 gulp.task('compile-css', getTask('compile-css'));
 gulp.task('compile-templates', getTask('compile-templates'));
 gulp.task('compile-js', ['compile-templates'], getTask('compile-js'));

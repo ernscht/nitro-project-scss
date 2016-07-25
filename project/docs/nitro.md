@@ -98,18 +98,38 @@ Different data variations has to be placed in the `_data` folder:
 
 ### Creating pages
 
-Create a new `*.html` file in the `views` folder. You can make as many subfolders as you want.
+Create a new `*.html` file in the `views` folder. (You can make as many subfolders as you want.)
 
     /views/index.html
     /views/content.html
     /views/content/variant.html
 
-Your new page can then be called by the according URL (with or without an extension). 
-Subfolders are represented with a dash.
+Your new page can then be called by the according URL (with or without an extension).  
+Subfolders are represented with a hyphen.
 
     http://localhost:8080/index
     http://localhost:8080/content
     http://localhost:8080/content-variant
+
+#### Layout
+
+By default views uses a simple layout mechanism. 
+The default layout template `views/_layouts/default.html` is used for every view. 
+The block `{{{body}}}` includes the contents from a view.
+
+Simple default layout: 
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head></head>
+    <body>
+        {{{body}}}
+    </body>
+    </html>
+
+To remove the layout feature, simply delete the folder `views/_layout`.
+
+Different layouts are placed in `views/_layouts/`. Link them to your view [in your page datafile](#use-different-layout).
 
 ### Render Components
 
@@ -175,9 +195,9 @@ The following two examples do the same and render the file `Content/example.html
 
 ### Passing data
 
-#### Data per view
+#### Data per page
 
-You may pass data to your templates (view, partial, component) per view.  
+You may pass data to your templates (view, layout, partial, component) per view.  
 Put a file with the same name as the view in the folder `views/_data/` with the file extension `.json`. 
 (Use the same folder structure as in `views`)
 
@@ -194,6 +214,24 @@ It's also possilbe to use a custom data file by requesting with a query param `?
     /views/index.html
     /views/_data/index-test.json
     http://localhost:8080/index?_data=index-test
+
+##### Use different layout
+
+If you need a different layout for a page, do so in the corresponding data file:
+
+    /views/_data/index.json
+    {
+        "_layout": "home"
+    }
+    
+    /views/_layouts/home.html
+    http://localhost:8080/index
+
+...or you may change the layout temporarily by requesting a page with the query param `?_layout=...`
+
+    /views/index.html
+    /views/_layouts/home.html
+    http://localhost:8080/index?_layout=home
 
 #### Dynamic view data
 
@@ -342,13 +380,13 @@ Link to resources relatively to the `project`-folder **with** a leading slash.
 
 Use all lowercase if possible. (Exception: TerrificJS uses upper case for its namespace `T` and class names `T.Module.Example`)
 
-If you want to use uppercase letters (e.g. for component folders), keep care of case sensitive filesystems and use handlebars helpers with *exact* file and folder names. 
+All files must be lowercase. It's allowed to use uppercase letters for component folders, keep care of case sensitive filesystems and use handlebars helpers with the *exact* folder name. 
 
     {{component name='NavMain'}}
 
-... looks for a template in the folder `NavMain`. 
+... looks for a template `navmain.html` in the folder `NavMain`. 
 
-Note that uppercase letters in component names are represented in CSS with dashes.
+Note that uppercase letters in component names are represented in CSS with hyphens.
 
     Navigation   -> T.Module.Navigation   -> m-navigation
     NavMain      -> T.Module.NavMain      -> m-nav-main
@@ -414,8 +452,12 @@ Nitro uses [Gulp](http://gulpjs.com/) under the hood and can therefore be used o
 ### Git Hooks
 
 Nitro tries to install a `post-merge` git hook with every `npm install`.
-This hook will run a `npm install` if someone changes `package.json` 
-and will run `bower install` if someone changes `bower.json`. 
+
+This hook will:
+
+* run `npm install` if someone changes `package.json` 
+* run `bower install` if someone changes `bower.json`. 
+* sync this git hooks if someone changes one.
  
 You may [change this or add other hooks](../.githooks/README.md) in `project/.githooks`.
 
@@ -434,7 +476,7 @@ You may [change this or add other hooks](../.githooks/README.md) in `project/.gi
 
 The following packages are always installed by the [app](#name) generator:
 
-* [jQuery 2.2.4](http://jquery.com/)
+* [jQuery 3.1.0](http://jquery.com/)
 * [TerrificJS 3.0.0](https://github.com/brunschgi/terrificjs)
 * [Handlebars 4.0.5](https://github.com/components/handlebars.js)
 
@@ -442,5 +484,5 @@ All of these can be updated with `bower update` as new versions are released.
 
 ### Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.3.8).  
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.3.11).  
 Nitro is an alternative to [Terrific Micro](https://github.com/namics/terrific-micro) which is developed by Namics AG.

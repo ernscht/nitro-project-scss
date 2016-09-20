@@ -9,7 +9,7 @@
 			"components/**/css/modifier/*.scss"
 		],
 		"app.js": [
-			"assets/vendor/es6-promise/promise.min.js",
+			"assets/vendor/es6-promise/es6-promise.min.js",
 			"assets/vendor/jquery/dist/jquery.min.js",
 			"assets/vendor/terrific/dist/terrific.min.js",
 			"assets/vendor/handlebars/handlebars.runtime.min.js",

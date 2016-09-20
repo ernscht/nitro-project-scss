@@ -49,9 +49,13 @@ Use
 
 or
 
-    node server.js
+    node server
 
 ... to start the server only
+
+For production mode add `NODE_ENV=production` environment variable
+
+    NODE_ENV=production && gulp production
 
 The Nitro app will run on port `8080` by default, the proxy on `8081` (only run with `develop` task).  
 If you want the app to run on another port put them before the gulp task like this:
@@ -60,12 +64,13 @@ If you want the app to run on another port put them before the gulp task like th
 
 The port to be used in production can be set the same way:
  
-    PORT=3000 node server.js
+    PORT=3000 node server
 
 This works a bit different on **Windows**. Use the following commands in prompt:
  
     set PORT=8000 && set PROXY=8001 && gulp develop
-    set PORT=3000 && node server.js
+    set PORT=3000 && node server
+    set NODE_ENV=production && gulp production
 
 ## Daily Work - Creating Components & Pages
 
@@ -484,5 +489,5 @@ All of these can be updated with `bower update` as new versions are released.
 
 ### Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.3.11).  
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.4.4).  
 Nitro is an alternative to [Terrific Micro](https://github.com/namics/terrific-micro) which is developed by Namics AG.

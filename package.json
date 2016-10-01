@@ -1,7 +1,7 @@
 {
   "name": "nitro",
   "version": "0.0.0",
-  "description": "Nitro is a Node.js application for simple and complex frontend development with a tiny footprint. This app is based on generator-nitro 0.4.5",
+  "description": "Nitro is a Node.js application for simple and complex frontend development with a tiny footprint. This app is based on generator-nitro 0.4.6",
   "license": "UNLICENSED",
   "private": true,
   "author": "The Nitro Team",
@@ -24,13 +24,13 @@
     "modular"
   ],
   "dependencies": {
-    "autoprefixer": "~6.4.1",
+    "autoprefixer": "~6.5.0",
     "body-parser": "~1.15.2",
-    "browser-sync": "~2.16.0",
+    "browser-sync": "~2.17.0",
     "compression": "~1.6.2",
     "del": "~2.2.2",
-    "dot-object": "~1.5.1",
-    "es6-promise": "~3.3.1",
+    "dot-object": "~1.5.4",
+    "es6-promise": "~4.0.3",
     "express": "~4.14.0",
     "extend": "~3.0.0",
     "globby": "~6.0.0",
@@ -54,7 +54,7 @@
     "gulp-sass": "~2.3.2",
     "gulp-size": "~2.1.0",
     "gulp-sourcemaps": "~1.6.0",
-    "gulp-stylelint": "~3.2.0",
+    "gulp-stylelint": "~3.3.0",
     "gulp-uglify": "~2.0.0",
     "gulp-wrap": "~0.13.0",
     "hbs": "4.0.0",
@@ -70,6 +70,6 @@
     "merge-stream": "~1.0.0"
   },
   "devDependencies": {
-    "gulp-watch": "~4.3.9"
+    "gulp-watch": "~4.3.10"
   }
 }

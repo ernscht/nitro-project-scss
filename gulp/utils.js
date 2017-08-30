@@ -1,51 +1,52 @@
-var cfg = require('../app/core/config');
-var fs = require('fs');
-var path = require('path');
-var gulp = require('gulp');
-var plugins = require('gulp-load-plugins')();
-var browserSync;
-var assets = {};
+'use strict';
+
+const config = require('config');
+const path = require('path');
+const gulp = require('gulp');
+const plugins = require('gulp-load-plugins')();
+let browserSync;
+let assets = {};
 
 function getBrowserCompatibility() {
-	return cfg.code.compatibility.browsers;
+	return config.get('code.compatibility.browserslist');
 }
 
 function getBrowserSyncInstance() {
-	var name = 'Nitro' + cfg.server.port;
-	if (!browserSync) {
+	const name = `Nitro${config.get('server.port')}`;
+	if (config.get('nitro.mode.livereload') && !browserSync) {
 		browserSync = require('browser-sync').create(name);
 	}
 	return browserSync;
 }
 
 function getSourcePatterns(ext) {
-	var type = typeof ext === 'string' && ( ext === 'js' || ext === 'css' ) ? ext : null;
+	const type = typeof ext === 'string' && (ext === 'js' || ext === 'css') ? ext : null;
 
 	if (!assets.hasOwnProperty('js') || !assets.hasOwnProperty('css')) {
 		updateSourcePatterns();
 	}
 
-	return type ?  assets[type] : assets;
+	return type ? assets[type] : assets;
 }
 
 function updateSourcePatterns() {
-	var key, ext, type, asset, result, patternKey, patternPath;
+	let key, ext, type, asset, result, patternKey, patternPath;
 
 	assets = {
 		css: [],
-		js: []
+		js: [],
 	};
 
-	for (key in cfg.assets) {
-		if (cfg.assets.hasOwnProperty(key)) {
+	for (key in config.get('assets')) {
+		if (config.assets.hasOwnProperty(key)) {
 			ext = path.extname(key);
 			if (ext) {
 				type = ext.replace(/[^a-z]/g, '');
-				asset = cfg.assets[key];
+				asset = config.assets[key];
 				result = {
 					name: key,
 					deps: [],
-					src:  []
+					src: [],
 				};
 
 				for (patternKey in asset) {
@@ -53,8 +54,7 @@ function updateSourcePatterns() {
 						patternPath = asset[patternKey];
 						if (patternPath.indexOf('+') === 0) {
 							result.deps.push(patternPath.substr(1));
-						}
-						else {
+						} else {
 							result.src.push(patternPath);
 						}
 					}
@@ -69,30 +69,19 @@ function getTask(task) {
 	return require('./' + task)(gulp, plugins);
 }
 
-function reloadConfig() {
-	cfg = cfg.reload();
-	return cfg;
-}
-
-
-
-function fileExistsSync(filename) {
-	// Substitution for the deprecated fs.existsSync() method @see https://nodejs.org/api/fs.html#fs_fs_existssync_path
-	try {
-		fs.accessSync(filename);
-		return true;
+function getTmpDirectory(subPath) {
+	let tmpPath = 'project/tmp';
+	if (subPath && typeof subPath === 'string') {
+		tmpPath += `/${subPath}`;
 	}
-	catch (ex) {
-		return false;
-	}
+	return tmpPath;
 }
 
 module.exports = {
-	fileExistsSync: fileExistsSync,
-	getBrowserCompatibility: getBrowserCompatibility,
-	getBrowserSyncInstance: getBrowserSyncInstance,
-	getSourcePatterns: getSourcePatterns,
-	getTask: getTask,
-	reloadConfig: reloadConfig,
-	updateSourcePatterns: updateSourcePatterns
+	getBrowserCompatibility,
+	getBrowserSyncInstance,
+	getSourcePatterns,
+	getTask,
+	getTmpDirectory,
+	updateSourcePatterns,
 };

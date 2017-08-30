@@ -1,326 +1,396 @@
 # Nitro Usage
 
-Nitro is a Node.js application for simple and complex frontend development with a tiny footprint.  
+Nitro is a Node.js application for simple and complex frontend development with a tiny footprint.
 It provides a proven but flexible structure to develop your frontend code, even in a large team.  
-Keep track of your code with a modularized frontend. This app and the suggested concepts could help - 
+Keep track of your code with a modularized frontend. This app and the suggested concepts could help -
 [atomic design](http://bradfrost.com/blog/post/atomic-web-design/) and [BEM](https://en.bem.info/method/definitions/).  
 Nitro is simple, fast and flexible. Use this app for all your frontend work.
 
 ## Features
 
-* Simple project structure
+* Simple and proven project structure
 * CSS/JS concatenation and minification
 * LESS/SCSS support (with caching for optimal performance)
-* Source Maps, Linting, PostCSS & Browsersync
-* Bower support
+* ES2015 with babel transpiling
+* Linting, Source Maps, PostCSS & Browsersync
 * Jasmine tests with Karma test runner
-* Yeoman component generator
+* Yeoman pattern generator
 * [Client side templates](client-templates.md)
 
 ## Preparation
 
 This application was created by the yeoman generator for nitro.  
-Before using, you need of course [node and npm](https://nodejs.org/) installed. 
-Currently supported node.js versions are 0.12.x, and 4.x. So everything between should work.  
-And also you need the yeoman [generator-nitro](https://www.npmjs.com/package/generator-nitro) 
-and some dependencies installed globally.
+Before using, you need of course [node](https://nodejs.org/) installed.
+Nitro is tested with the current LTS versions of the node.js releases 4 and 6
+and should also work with node.js release 8.  
+And also you need [yarn](https://www.npmjs.com/package/yarn), 
+the [yeoman cli tool](https://www.npmjs.com/package/yo) and
+the yeoman [generator-nitro](https://www.npmjs.com/package/generator-nitro) installed globally.
 
-    npm install -g yo bower gulp jasmine karma-cli generator-nitro
+```
+npm install -g yarn yo generator-nitro
+```
 
 Keep your global packages up to date:
 
-    npm outdated -g --depth=0
+```
+npm outdated -g --depth=0
+```
 
 Make an update if necessary:
 
-    npm update -g
+```
+npm update -g
+```
 
 Install the project dependencies in the project root:
 
-    npm install
+```
+yarn install
+```
 
 ## Starting the app
 
 Use
 
-    gulp develop
+```
+yarn dev
+```
 
 ... to start in development mode
 
 or
 
-    node server
+```
+node server
+```
 
 ... to start the server only
 
 For production mode add `NODE_ENV=production` environment variable
 
-    NODE_ENV=production && gulp production
+```
+NODE_ENV=production && yarn prod
+```
 
-The Nitro app will run on port `8080` by default, the proxy on `8081` (only run with `develop` task).  
-If you want the app to run on another port put them before the gulp task like this:
+The Nitro app will run on port `8080` by default, the proxy on `8081` (only run with `dev` task).  
+If you want the app to run on another port put them before the start task like this:
 
-    PORT=8000 PROXY=8001 gulp develop
+```
+PORT=8000 PROXY=8001 yarn dev
+```
 
 The port to be used in production can be set the same way:
- 
-    PORT=3000 node server
+
+```
+PORT=3000 node server
+```
 
 This works a bit different on **Windows**. Use the following commands in prompt:
- 
-    set PORT=8000 && set PROXY=8001 && gulp develop
-    set PORT=3000 && node server
-    set NODE_ENV=production && gulp production
 
-## Daily Work - Creating Components & Pages
+```
+set PORT=8000 && set PROXY=8001 && yarn dev
+set PORT=3000 && node server
+set NODE_ENV=production && yarn prod
+```
 
-### Creating Components
+## Configuring
 
-Components are created in the `components` folder. A component is an encapsulated block of markup 
-with corresponding styles, scripts and data.  
-For a better overview it is useful to define different types of components. It is recommended to make 
-subfolders like `atoms`, `molecules` & `organisms`  
-A component uses the following structure:
+Nitro uses the flexible [config package](https://www.npmjs.com/package/config) for project configuration. 
+This lets you to extend the default configuration for different deployment environments or local usage.  
+See details in [config readme](nitro-config.md)
 
-    /example
-    /example/example.html
-    /example/css/example.css
-    /example/js/example.js
-    /example/_data/example.json
+## Daily Work - Creating Patterns & Pages
 
-Modifiers (JavaScript) and decorators (CSS) are created using the following conventions:
+### Creating Patterns
 
-    /example/css/modifier/example-<modifier>.css
-    /example/js/decorator/example-<decorator>.js
+Patterns are created in the `patterns` folder. A pattern is an encapsulated block of markup
+with corresponding styles, scripts and data. The pattern data can be described in `schema.json`
+with [JSON schema](http://json-schema.org) format (draft-04). Nitro uses [ajv](http://epoberezkin.github.io/ajv/) for validation.
 
-Different data variations has to be placed in the `_data` folder:
+For a better overview it is useful to define different types of patterns in [config](nitro-config.md).
 
-    /example/_data/example-variant.json
+It is recommended to make subfolders like `atoms`, `molecules` & `organisms`.
 
-### Creating Components with yo
+A pattern uses the following structure:
 
-    yo nitro:component
+```
+/example
+/example/example.html
+/example/schema.json
+/example/css/example.css
+/example/js/example.js
+/example/_data/example.json
+```
+
+Modifiers (CSS) and decorators (JavaScript) are created using the following conventions:
+
+```
+/example/css/modifier/example-<modifier>.css
+/example/js/decorator/example-<decorator>.js
+```
+
+Different data variations have to be placed in the `_data` folder:
+
+```
+/example/_data/example-variant.json
+```
+
+### Creating patterns with yo
+
+```
+yo nitro:pattern
+```
+
+This will copy the templates (nitro.patterns.<type>.template) from config to the configured target.
+
+### Creating pattern elements
+
+If you want to split up your pattern into smaller parts you may use elements.
+For this, place a new pattern in the folder `elements` inside a pattern.
+
+Element `example-sub` in pattern `example`:
+
+```
+/example/elements/example-sub
+/example/elements/example-sub/example-sub.html
+/example/elements/example-sub/css/example-sub.css
+/example/elements/example-sub/js/example-sub.js
+/example/elements/example-sub/_data/example-sub.json
+```
+
+It's recommended to start the name of a subpattern with the pattern name.
 
 ### Creating pages
 
 Create a new `*.html` file in the `views` folder. (You can make as many subfolders as you want.)
 
-    /views/index.html
-    /views/content.html
-    /views/content/variant.html
+```
+/views/index.html
+/views/content.html
+/views/content/variant.html
+```
 
 Your new page can then be called by the according URL (with or without an extension).  
 Subfolders are represented with a hyphen.
 
-    http://localhost:8080/index
-    http://localhost:8080/content
-    http://localhost:8080/content-variant
+```
+http://localhost:8080/index
+http://localhost:8080/content
+http://localhost:8080/content-variant
+```
 
 #### Layout
 
-By default views uses a simple layout mechanism. 
-The default layout template `views/_layouts/default.html` is used for every view. 
+By default views use a simple layout mechanism.
+The default layout template `views/_layouts/default.html` is used for every view.
 The block `{{{body}}}` includes the contents from a view.
 
-Simple default layout: 
+Simple default layout:
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head></head>
-    <body>
-        {{{body}}}
-    </body>
-    </html>
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+    {{{body}}}
+</body>
+</html>
+```
 
 To remove the layout feature, simply delete the folder `views/_layout`.
 
 Different layouts are placed in `views/_layouts/`. Link them to your view [in your page datafile](#use-different-layout).
 
-### Render Components
+### Render patterns
 
-Pages are meant to be compositions of your components. Use the component's name as the first parameter. Be aware, the
-component name is case-sensitive.
+Pages are meant to be compositions of your patterns. Use the pattern's name as the first parameter. Be aware, the
+pattern name is case-sensitive and should be unique.
 
 Nitro uses [handlebars](https://www.npmjs.com/package/hbs) as the view engine and provides custom helpers.
 
-Render the example component. (file: `example.html`, data-file: `example.json`)
+Render the example pattern (file: `example.html`, data-file: `example.json`):
 
-    {{component 'example'}}
-    {{component 'example', 'example'}}
+```
+{{pattern name='example'}}
+{{pattern name='example' data='example'}}
+```
 
-Render a "variant" from the example component. (file: `example.html`, data-file: `example-variant.json`)
+Render a "variant" from the example pattern (file: `example.html`, data-file: `example-variant.json`):
 
-    {{component 'example' 'example-variant'}}
-    
-Another possibility to use the component helper is by providing hash options.
+```
+{{pattern name='example' data='example-variant'}}
+```
 
-    {{component name='example' data='example-variant'}}
+There also is a possibility to pass data to subpatterns by providing a data object as hash option.
+
+```
+{{pattern name='example' data=exampleContent}}
+```
 
 ...and if you really need this you may provide a second template file. (file: `example-2.html`, data-file: `example-variant.json`)
 
-    {{component name='example' data='example-variant' template='example-2'}}
+```
+{{pattern name='example' data='example-variant' template='example-2'}}
+```
 
-There also is a possibility to pass data to subcomponents by providing a data object as second parameter or as hash option.
+To be more flexible, you may also pass individual arguments to the pattern, which overrides the defaults from the data-file.
 
-    {{component 'example' exampleContent}}
-    {{component 'example' data=exampleContent}}
+```
+{{pattern name='example' modifier='blue'}}
+```
 
-To be more flexible, you may also pass individual arguments to the component, which overrides the defaults.
+#### Render patterns (simplified notation)
 
-    {{component 'example' modifier='blue'}}
+A simplified but less clear variant is to use the pattern helper with one or two parameters.
 
-#### Render Components with children
+* the first parameter: pattern folder with the default template file
+* the second parameter (optional): the data-file to be used
 
-Maybe using your component templates with transclusion could be helpful in some cases.
+Render the example pattern (file: `example.html`, data-file: `example.json`):
 
-    // example box template
-    <div class="a-box">
-        {{{children}}}
-    </div>
+```
+{{pattern 'example'}}
+{{pattern 'example' 'example'}}
+```
+
+Or you may use the simplified notation with a data object as second parameter:
+
+```
+{{pattern 'example' exampleContent}}
+```
+
+#### Render patterns with children
+
+Maybe using your pattern templates with transclusion could be helpful in some cases.
+
+```html
+// example box template
+<div class="a-box">
+    {{{children}}}
+</div>
+```
 
 Call it as block like this:
 
-    {{#component 'box'}}
-        {{component 'example'}}
-    {{/component}}
+```
+{{#pattern 'box'}}
+    {{pattern 'example'}}
+{{/pattern}}
+```
 
-### Render Partials
+#### Render pattern elements
+
+The pattern helper will find also pattern elements.
+
+```
+{{pattern 'example-sub'}}
+```
+
+... looks for following paths
+
+- Pattern with name `example-sub`: `<type>/example-sub/example-sub.html`
+- Element with name `example-sub`: `<type>/*/elements/example-sub/example-sub.html`
+
+### Render partials
 
 Render a partial (HTML snippet). Partials are placed in `views/_partials/` as `*.html` files (e.g. `head.html`).
 
-    {{> head}}
+```
+{{> head}}
+```
 
-### Render Placeholders
+Partials are registered with [hbs-utils](https://www.npmjs.com/package/hbs-utils#partials), 
+so keep in mind that every space or hyphen in filenames is replaced with an underscore.
+(e.g. use `{{> file_name}}` to load `views/_partials/file-name.html`)
+
+### Render placeholders
 
 Using a placeholder is another way to output some markup. Placeholders are placed in a folder inside `views/_placeholders/` as `*.html` files.  
-The following two examples do the same and render the file `Content/example.html` from `views/_placeholders/`.
+The following two examples do the same and render the file `content/example.html` from `views/_placeholders/`.
 
-    {{placeholder 'content' 'example'}}
-    {{placeholder name='content' template='example'}}
+```
+{{placeholder 'content' 'example'}}
+{{placeholder name='content' template='example'}}
+```
 
 ### Passing data
 
 #### Data per page
 
-You may pass data to your templates (view, layout, partial, component) per view.  
-Put a file with the same name as the view in the folder `views/_data/` with the file extension `.json`. 
-(Use the same folder structure as in `views`)
+You may pass data to your templates (view, layout, partial, pattern) per view.  
+Put a file with the same name as the view in the folder `views/_data/` with the file extension `.json`. (Use the same folder structure as in `views`)
 
-    /views/index.html
-    /views/_data/index.json
-    http://localhost:8080/index
+```
+/views/index.html
+/views/_data/index.json
+http://localhost:8080/index
 
-    /views/content/variant.html
-    /views/_data/content/variant.json
-    http://localhost:8080/content-variant
+/views/content/variant.html
+/views/_data/content/variant.json
+http://localhost:8080/content-variant
+```
 
-It's also possilbe to use a custom data file by requesting with a query param `?_data=...`:
+It's also possible to use a custom data file by requesting with a query param `?_data=...`:
 
-    /views/index.html
-    /views/_data/index-test.json
-    http://localhost:8080/index?_data=index-test
+```
+/views/index.html
+/views/_data/index-test.json
+http://localhost:8080/index?_data=index-test
+```
 
 ##### Use different layout
 
-If you need a different layout for a page, do so in the corresponding data file:
+If you need a different layout for a page, do so in the corresponding view data file.
+(View data files needs to be placed in same directory structure than views)
 
+```
     /views/_data/index.json
     {
         "_layout": "home"
     }
-    
+
     /views/_layouts/home.html
     http://localhost:8080/index
+```
 
 ...or you may change the layout temporarily by requesting a page with the query param `?_layout=...`
 
-    /views/index.html
-    /views/_layouts/home.html
-    http://localhost:8080/index?_layout=home
+```
+/views/index.html
+/views/_layouts/home.html
+http://localhost:8080/index?_layout=home
+```
 
 #### Dynamic view data
 
-If you want to use dynamic view data (i.e. using data from a database or data which is available in different views), 
-you can define those "routes" in the directory [`project/viewData/`](../viewData/README.md). 
+If you want to use dynamic view data (i.e. using data from a database or data which is available in different views),
+you can define those "routes" in the directory [`project/viewData/`](../viewData/readme.md).
 
-#### Data per component
+#### Data per pattern
 
-Component data will overwrite data from views. (Use as described above)
+Pattern data will overwrite data from views. (Use as described above)
 
 #### Data in request
 
-You may overwrite data from views & components in request parameters.
+You may overwrite data from views & patterns in request parameters.
 
 `?pageTitle=Testpage` will overwrite the data for the handlebars expression `{{pageTitle}}`
 
 It's also possible to use dot notation for object data:
 
-`?page.title=Testpage` will overwrite the value for `{{page.title}}` 
+`?page.title=Testpage` will overwrite the value for `{{page.title}}`
 
 ## Assets
 
-One of Nitro's main feature is asset concatenation for CSS and JavaScript files. 
-If changed, the files will be updated on every change, 
-therefore you'll always get the latest version.
+One of Nitro's main feature is asset concatenation for CSS and JavaScript files.
+If changed, the files will be updated on every change, therefore you'll always get the latest version.
 
-### Assets Configuration
-
-You can configure the include order of your assets by defining patterns in `config.json`.
-
-    "assets": {
-        "app.css": [
-            "!assets/css/somefile.*",
-            "assets/css/cssreset.css",
-            "assets/css/*.*",
-            "components/**/css/*.*",
-            "components/**/css/modifier/*.*"
-        ],
-        "app.js": [
-            "!assets/js/somefile.js",
-            "assets/vendor/jquery/dist/jquery.min.js",
-            "assets/vendor/terrific/dist/terrific.min.js",
-            "assets/js/*.js",
-            "components/**/js/*.js",
-            "components/**/js/decorator/*.js"
-        ]
-    }
-
-#### Pattern
-
-The matching patterns follow the standard node glob patterns.  
-Glob patterns are similar to regular expression but simplified. They are used by several shells.  
-You should always try to keep the patterns simple. Usually you only need the asterisks `*` `**` 
-and the exclamation mark `!` for negation.
-
-You can read more on the standard [node glob patterns](https://github.com/isaacs/node-glob#glob-primer).
-
-#### Special Pattern Prefixes
-
-* You can negate a pattern by starting with an exclamation mark `!`.
-  `!` = exclude pattern
-* Define all your dependencies for the compiling-process with the `+` prefix
-  `+` = exclude file but prepend it to every compile call for files with the same file extension.
-
-The order of these special patterns does not matter.
-
-#### Examples
-
-* `"!components/*/test*"`         Exclude all components starting with `test`
-* `"!**/*-test.*"`                Exclude all filenames ending with `-test`.
-* `"+assets/css/mixins.less"`     Exclude `assets/css/mixins.less` but prepend to every compile call of every .less file
-
-### Other Asset Files
-
-You can configure as many different assets as you wish.
-
-    "brand.css": [
-        "assets/css/reset.css",
-        ...
+You can configure the include order of your assets by defining patterns in [config](nitro-config.md).
 
 ## Translations
 
-Nitro uses [i18next](http://i18next.com/node/index.html) as Translation Library 
-and gives you the Handlebars helper `{{t}}`.  
+Nitro uses [i18next](https://www.npmjs.com/package/i18next) as Translation Library and gives you the Handlebars helper `{{t}}`.  
 Translations are stored in `project/locales/[lang]/translation.json`.
 
 Express Middleware configuration:
@@ -331,122 +401,121 @@ Express Middleware configuration:
 
 ### Translation handlebars helper
 
-The helper combines the given [library features](http://i18next.com/node/pages/doc_features.html) with a second system of translation features.
+The helper uses the given [library features](http://i18next.com/translate/).
 
-The library needs one object to transfer data and uses two underscores as interpolation pre- and suffixes 
-or uses `%s` placeholders for sprintf functionality.
+You may use hash values or an object to transfer data to the helper. Use two brackets as interpolation pre- and suffixes
+or use `%s` placeholders for sprintf functionality.
 
 Some examples:
 
-    data = {
-       name: "developer"
-    }
-    
-    "test": {
-        "example": {
-            "string" : "gold",
-            "nested": "All that glitters is not $t(test.example.string).",
-            "sprintf" : "The first three letters of %s are: %s, %s and %s",
-            "interpolation" : "Hello __name__"
-        }
-    }
+```
+data = {
+   name: 'developer'
+}
 
-    {{t "test.example.string"}}
-    {{t "test.example.nested"}}
-    {{t "test.example.sprintf" "alphabet" "a" "l" "p"}}
-    {{t "test.example.interpolation" data}}
-
-The second system uses brackets as interpolation and numbered or named placeholders:
-
-    "test": {
-        "example": {
-            "interpolation1" : "The last two letters of {1} are: {3} and {2}",
-            "interpolation2" : "The first letter of {word} is: {one}"
-        }
+"test": {
+    "example": {
+        "string" : "gold",
+        "nested": "All that glitters is not $t(test.example.string).",
+        "sprintf" : "The first three letters of %s are: %s, %s and %s",
+        "interpolation" : "Hello {{name}}"
     }
-    
-    {{t "test.example.interpolation1" "alphabet" "e" "t"}}
-    {{t "test.example.interpolation2" word="alphabet" one="a"}}
+}
+
+{{t 'test.example.string'}}
+{{t 'test.example.nested'}}
+{{t 'test.example.sprintf' 'alphabet' 'a' 'l' 'p'}}
+{{t 'test.example.interpolation' name='developer'}}
+{{t 'test.example.interpolation' data}}
+```
 
 ## Conventions
 
 ### Resource linking
 
-To stay consistent you should favour the use of relative paths with a leading slash. 
+To stay consistent you should favour the use of relative paths with a leading slash.
 Link to resources relatively to the `project`-folder **with** a leading slash.
 
-    <link rel="stylesheet" href="/assets/app.css" type="text/css" />
-    <link rel="shortcut icon" href="/assets/img/icon/favicon.ico" type="image/x-icon" />
-    <script src="/assets/app.js"></script>
-    background: url(/assets/img/bg/texture.png) scroll 0 0 no-repeat;
-    <a href="/content.html">Contentpage</a>
+```html
+<link rel="stylesheet" href="/assets/app.css" type="text/css" />
+<link rel="shortcut icon" href="/assets/img/icon/favicon.ico" type="image/x-icon" />
+<script src="/assets/app.js"></script>
+background: url(/assets/img/bg/texture.png) scroll 0 0 no-repeat;
+<a href="/content.html">Contentpage</a>
+```
 
 ### Upper & lower case letters
 
 Use all lowercase if possible. (Exception: TerrificJS uses upper case for its namespace `T` and class names `T.Module.Example`)
 
-All files must be lowercase. It's allowed to use uppercase letters for component folders, keep care of case sensitive filesystems and use handlebars helpers with the *exact* folder name. 
+All files must be lowercase. It's allowed to use uppercase letters for pattern folders, keep care of case sensitive filesystems and use handlebars helpers with the *exact* folder name.
 
-    {{component name='NavMain'}}
+```
+{{pattern name='NavMain'}}
+```
 
-... looks for a template `navmain.html` in the folder `NavMain`. 
+... looks for a template `navmain.html` in the folder `NavMain`.
 
-Note that uppercase letters in component names are represented in CSS with hyphens.
+Note that uppercase letters in pattern names are represented in CSS with hyphens.
 
-    Navigation   -> T.Module.Navigation   -> m-navigation
-    NavMain      -> T.Module.NavMain      -> m-nav-main
-    AdminNavMain -> T.Module.AdminNavMain -> m-admin-nav-main
-    
+```
+Navigation   -> T.Module.Navigation   -> m-navigation
+NavMain      -> T.Module.NavMain      -> m-nav-main
+AdminNavMain -> T.Module.AdminNavMain -> m-admin-nav-main
+```
 ### Custom Handlebars helpers
 
 Custom handlebars helpers will be automatically loaded if put into to `project/helpers` directory. An example could look like 
 this:
 
-    module.exports = function(foo) {
-        // Helper Logic
-    };
+```js
+module.exports = function(foo) {
+    // Helper Logic
+};
+```
 
 The helper name will automatically match the filename, so if you name your file `foo.js` your helper will be called `foo`.
 
 ### JSON Endpoints
 
-If you need to mock service endpoints, you can put JSON files into a directory inside the `/public` directory as 
+If you need to mock service endpoints, you can simply put JSON files into a directory inside the `/public` directory as
 those are directly exposed.
 
-`/public/service/posts.json` will be available under `/service/posts.json` 
+`/public/service/posts.json` will be available under `/service/posts.json`
 and can be used for things like AJAX requests.
 
 ### Custom Routes
 
-If you need more custom functionality in endpoints 
-you can put your custom routes with their logic 
+If you need more custom functionality in endpoints
+you can put your custom routes with their logic
 into the [`project/routes` directory](project/routes/).
 
 ### Using another Template Engine
 
-If you don't want to use [Handlebars](http://handlebarsjs.com/) as Nitro's Template Engine 
+If you don't want to use [Handlebars](http://handlebarsjs.com/) as Nitro's Template Engine
 you can configure your own Engine.  
 This example shows how to replace Handlebars with [Nunjucks](https://mozilla.github.io/nunjucks/) as an example.
 
 All these steps need to be performed in `server.js`.
 
-1. Replace the line `hbs = require('./app/core/hbs')` with `nunjucks = require('nunjucks')`
-2. Remove the line `app.engine(cfg.nitro.view_file_extension, hbs.__express);`
+1. Replace the line `hbs = require('./app/templating/hbs/engine')` with `nunjucks = require('nunjucks')`
+2. Remove the partials line and  `app.engine(config.get('nitro.viewFileExtension'), hbs.__express);`
 3. Configure nunjucks as Express' Template Engine with the following block:
 
+```js
+nunjucks.configure(
+    config.get('nitro.basePath') + config.get('nitro.viewDirectory'),
+    {
+        autoescape: true,
+        express: app
+    },
+);
+```
 
-    nunjucks.configure(
-        cfg.nitro.base_path + cfg.nitro.view_directory,
-        {
-            autoescape: true,
-            express: app
-        }
-    );
-    
 Now Restart Nitro and it'll run with Nunjucks.
 
-**Be aware**, you'll need to adjust all your views and components to work with the new engine. 
-Nitro only provides a `component` helper for handlebars.
+**Be aware**, you'll need to adjust all your views and patterns to work with the new engine. 
+Nitro only provides a `pattern` helper for handlebars.
 
 ## Miscellaneous
 
@@ -456,38 +525,35 @@ Nitro uses [Gulp](http://gulpjs.com/) under the hood and can therefore be used o
 
 ### Git Hooks
 
-Nitro tries to install a `post-merge` git hook with every `npm install`.
+Nitro tries to install a `post-merge` git hook with every `yarn install` (if we are in git root).
 
 This hook will:
 
-* run `npm install` if someone changes `package.json` 
-* run `bower install` if someone changes `bower.json`. 
+* run `yarn install` if someone changes `yarn.lock`
 * sync this git hooks if someone changes one.
- 
-You may [change this or add other hooks](../.githooks/README.md) in `project/.githooks`.
+
+You may [change this or add other hooks](../.githooks/readme.md) in `project/.githooks`.
 
 ### Contributing
 
-* For Bugs and Features please use [GitHub](https://github.com/namics/generator-nitro/issues)
-* Feel free to fork and send PRs to the current `develop` branch. That's the best way to discuss your ideas.
+* For bugs and features please use [GitHub Issues](https://github.com/namics/generator-nitro/issues)
+* Feel free to fork and send PRs to the current `develop` branch. That's a good way to discuss your ideas.
 
 ### Example Project Includes
 
 * [YUI CSS Reset 3.18.1](http://yuilibrary.com/yui/docs/cssreset/)
 * Favicon & Home-Icons from Nitro (replace with your own)
-* Component `example` and some styles in assets/css (you don't need them)
+* Pattern `example` and `icon` and some styles in assets/css (you don't need them)
 
-#### Bower Components
+#### Client Dependencies
 
-The following packages are always installed by the [app](#name) generator:
+The following packages are installed by the [app](#name) generator as dependencies:
 
-* [jQuery 3.1.1](http://jquery.com/)
+* [jQuery 3.2.0](http://jquery.com/)
 * [TerrificJS 3.0.0](https://github.com/brunschgi/terrificjs)
-* [Handlebars 4.0.5](https://github.com/components/handlebars.js)
-
-All of these can be updated with `bower update` as new versions are released.
+* [Handlebars 4.0.7](https://github.com/components/handlebars.js)
+* [Babel Polyfill 6.23.0](https://www.npmjs.com/package/babel-polyfill)
 
 ### Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 0.4.10).  
-Nitro is an alternative to [Terrific Micro](https://github.com/namics/terrific-micro) which is developed by Namics AG.
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 2.0.4).

@@ -1,22 +1,25 @@
-var fs = require('fs');
-var utils = require('./utils');
+'use strict';
 
-module.exports = function (gulp, plugins) {
-	return function (callback) {
-		var pidFile = '.servepid';
+const fs = require('fs');
 
-		if (utils.fileExistsSync(pidFile)) {
-			var pid = fs.readFileSync(pidFile, {
-				encoding: 'utf8'
+module.exports = (gulp, plugins) => {
+	return (cb) => {
+		const pidFile = '.servepid';
+
+		if (fs.existsSync(pidFile)) {
+			const pid = fs.readFileSync(pidFile, {
+				encoding: 'utf8',
 			});
 			process.kill(pid);
 
-			fs.unlinkSync(pidFile, function (err) {
-				if(err) return console.log(err);
+			fs.unlinkSync(pidFile, (err) => {
+				if (err) {
+					return console.log(err);
+				}
 				console.log('file deleted successfully');
 			});
 		}
 
-		callback();
+		cb();
 	};
 };

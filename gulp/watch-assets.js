@@ -1,92 +1,110 @@
-var cfg = require('../app/core/config');
-var utils = require('./utils');
-var globby = require('globby');
+'use strict';
 
-module.exports = function (gulp, plugins) {
-	return function () {
-		var isDependentStyleSource = function(file) {
-			var isDependent = false;
-			var cssAssets = utils.getSourcePatterns('css');
-			cssAssets.forEach(function (asset) {
-				globby.sync(asset.deps).forEach(function (path) {
-					if ( file.replace(/\\/g, '/').endsWith(path) ) {
-						isDependent = true;
-					}
-				});
+const config = require('config');
+const utils = require('./utils');
+const globby = require('globby');
+
+module.exports = (gulp, plugins) => {
+
+	const throttleBase = config.get('nitro.watch.throttle.base');
+	const throttleCache = config.get('nitro.watch.throttle.cache');
+	const lastRun = {};
+
+	function isDependentStyleSource(file) {
+		let isDependent = false;
+		utils.getSourcePatterns('css').forEach((asset) => {
+			globby.sync(asset.deps).forEach((path) => {
+				if (file.replace(/\\/g, '/').endsWith(path)) {
+					isDependent = true;
+				}
 			});
-
-			return isDependent;
-		};
-		var clearCache = function (e) {
-			if (
-				'unlink' === e.event ||
-				'add' === e.event ||
-				e.path.endsWith('config.json') ||
-				isDependentStyleSource(e.path)
-			) {
-				// forget all
-				plugins.cached.caches = {};
-				var cssAssets = utils.getSourcePatterns('css');
-				cssAssets.forEach(function (asset) {
-					if (plugins.remember.cacheFor(asset.name)) {
-						plugins.remember.forgetAll(asset.name);
-					}
-				});
-				var jsAssets = utils.getSourcePatterns('js');
-				jsAssets.forEach(function (asset) {
-					if (plugins.remember.cacheFor(asset.name)) {
-						plugins.remember.forgetAll(asset.name);
-					}
-				});
-			}
-		};
-		var browserSync = utils.getBrowserSyncInstance();
-
-		plugins.watch([
-			'config.json'
-		], function (e) {
-			cfg = utils.reloadConfig();
-			clearCache(e);
-			utils.updateSourcePatterns();
-			gulp.start('compile-css');
-			gulp.start('compile-js');
 		});
+		return isDependent;
+	}
+	function clearCssCache() {
+		utils.getSourcePatterns('css').forEach((asset) => {
+			if (plugins.cached.caches && plugins.cached.caches[asset.name]) {
+				delete plugins.cached.caches[asset.name];
+			}
+			if (plugins.remember.cacheFor(asset.name)) {
+				plugins.remember.forgetAll(asset.name);
+			}
+		});
+	}
+	function checkCssCache(e) {
+		if (
+			isDependentStyleSource(e.path) ||
+			e.event === 'unlink'
+		) {
+			processChange('cssCache', clearCssCache, throttleCache);
+		}
+	}
+	function processChange(type, func, throttle) {
+		type = type || 'other';
+		func = func || function () {};
+		throttle = throttle || throttleBase;
+
+		// call function only once in defined time
+		lastRun[type] = lastRun[type] || 0;
+		if (new Date() - lastRun[type] > throttle) {
+			func();
+		}
+		lastRun[type] = new Date();
+	}
+
+	return () => {
+		const browserSync = utils.getBrowserSyncInstance();
 
 		plugins.watch([
 			'assets/css/**/*.scss',
-			'components/**/css/**/*.scss'
-		], function (e) {
-			clearCache(e);
-			gulp.start('compile-css');
+			'patterns/**/css/**/*.scss',
+		], (e) => {
+			processChange('css', () => {
+				checkCssCache(e);
+				gulp.start('compile-css');
+			});
 		});
 
 		plugins.watch([
 			'assets/js/**/*.js',
-			'components/**/js/**/*.js',
-			'components/**/template/**/*.hbs'
-		], function () {
-			gulp.start('compile-js');
+			'patterns/**/js/**/*.js',
+			'patterns/**/template/**/*.hbs',
+		], () => {
+			processChange('js', () => {
+				gulp.start('compile-js');
+			});
 		});
 
 		plugins.watch([
-			'views/**/*.' + cfg.nitro.view_file_extension,
-			cfg.nitro.view_data_directory + '/**/*.json',
-			'components/**/*.' + cfg.nitro.view_file_extension,
-			'!components/**/template/**/*.hbs',
-			'components/**/_data/*.json'
-		], function () {
-			browserSync.reload();
+			`views/**/*.${config.get('nitro.viewFileExtension')}`,
+			`${config.get('nitro.viewDataDirectory')}/**/*.json`,
+			`patterns/**/*.${config.get('nitro.viewFileExtension')}`,
+			'!patterns/**/template/**/*.hbs',
+			'patterns/**/schema.json',
+			'patterns/**/_data/*.json',
+		], () => {
+			processChange('data', () => {
+				if (config.get('nitro.mode.livereload')) {
+					browserSync.reload('*.html');
+				}
+			});
 		});
 
 		plugins.watch([
-			'assets/img/**/*'
-		], function () {
+			'assets/img/**/*',
+		], () => {
 			gulp.start('minify-img');
 		});
 
 		plugins.watch([
-			'assets/font/**/*'
-		], function () {
+			'patterns/atoms/icon/img/icons/*.svg',
+		], () => {
+			gulp.start('svg-sprite');
+		});
+
+		plugins.watch([
+			'assets/font/**/*',
+		], () => {
 			gulp.start('copy-assets');
 		});
 	};

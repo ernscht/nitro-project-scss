@@ -1,39 +1,40 @@
-var config = require('../app/core/config');
-var fs = require('fs');
-var utils = require('./utils');
+'use strict';
 
-module.exports = function (gulp, plugins) {
-	var taskCallbackCalled = false;
+const config = require('config');
+const fs = require('fs');
 
-	return function (callback) {
-		var pidFile = '.servepid';
-		var server = plugins.liveServer(
+module.exports = (gulp, plugins) => {
+	let taskCallbackCalled = false;
+
+	return (cb) => {
+		const pidFile = '.servepid';
+		const server = plugins.liveServer(
 			'server.js',
 			{
 				env: {
-					PORT: config.server.port,
-					NODE_ENV: config.server.production ? 'production' : 'development'
-				}
+					PORT: Number(config.get('server.port')),
+					NODE_ENV: config.get('server.production') ? 'production' : 'development',
+				},
 			},
 			false
 		);
-		return server.start().then(function (result) {
-			console.log('Server exited with result:', result);
-			if (utils.fileExistsSync(pidFile)) {
+		return server.start().then((result) => {
+			console.log('Nitro exited with result:', result);
+			if (fs.existsSync(pidFile)) {
 				fs.unlinkSync(pidFile);
 			}
 			process.exit(result.code);
-			if(!taskCallbackCalled) {
+			if (!taskCallbackCalled) {
 				taskCallbackCalled = true;
-				callback();
+				cb();
 			}
-		}, function () {
+		}, () => {
 
-		}, function() {
+		}, () => {
 			fs.writeFileSync(pidFile, server.server.pid);
-			if(!taskCallbackCalled) {
+			if (!taskCallbackCalled) {
 				taskCallbackCalled = true;
-				callback();
+				cb();
 			}
 		});
 	};

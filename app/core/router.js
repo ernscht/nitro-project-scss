@@ -1,126 +1,110 @@
-var path = require('path');
-var fs = require('fs');
-var cfg = require('./config');
-var utils = require('./utils');
-var dot = require('dot-object');
-var extend = require('extend');
-var express = require('express');
-var router = express.Router({
+'use strict';
+
+const path = require('path');
+const fs = require('fs');
+const config = require('config');
+const utils = require('./utils');
+const view = require('../lib/view');
+const dot = require('dot-object');
+const extend = require('extend');
+const express = require('express');
+const router = express.Router({
 	caseSensitive: false,
-	strict:        false
+	strict: false,
 });
-var isProduction = cfg.server.production;
+const isProduction = config.get('server.production');
+const isOffline = config.get('nitro.mode.offline');
+const useMinifiedAssets = config.get('nitro.mode.minified');
 
 /**
  * static routes
  */
-router.use('/', express.static(cfg.nitro.base_path + '/public/'));
+router.use('/', express.static(config.get('nitro.basePath') + '/public/'));
 
 /**
  * views
  */
+function collectViewData(viewPath, defaultData, req) {
+
+	const data = {};
+	const tplPath = path.join(
+		config.get('nitro.basePath'),
+		config.get('nitro.viewDirectory'),
+		'/',
+		`${viewPath}.${config.get('nitro.viewFileExtension')}`
+	);
+
+	extend(true, data, defaultData);
+
+	if (!fs.existsSync(tplPath)) {
+		return false;
+	} else {
+		// collect data
+		const dataPath = path.join(
+			config.get('nitro.basePath'),
+			config.get('nitro.viewDataDirectory'),
+			'/',
+			`${viewPath}.json`
+		);
+		const customDataPath = req.query._data ? path.join(
+			config.get('nitro.basePath'),
+			config.get('nitro.viewDataDirectory'),
+			`/${req.query._data}.json`
+		) : false;
+
+		if (customDataPath && fs.existsSync(customDataPath)) {
+			extend(true, data, JSON.parse(fs.readFileSync(customDataPath, 'utf8')));
+		} else if (fs.existsSync(dataPath)) {
+			extend(true, data, JSON.parse(fs.readFileSync(dataPath, 'utf8')));
+		}
+
+		// handle query string parameters
+		if (Object.keys(req.query).length !== 0) {
+			const reqQuery = JSON.parse(JSON.stringify(req.query)); // simple clone
+			dot.object(reqQuery);
+			extend(true, data, reqQuery);
+			data._query = reqQuery; // save query for use in patterns
+		}
+
+		// layout handling
+		if (data._layout) {
+			if (utils.layoutExists(data._layout)) {
+				data.layout = utils.getLayoutPath(data._layout);
+			}
+		}
+		if (!data.layout || !utils.layoutExists(utils.getLayoutName(data.layout))) {
+			// use default layout if present
+			if (utils.layoutExists(config.get('nitro.defaultLayout'))) {
+				data.layout = utils.getLayoutPath(config.get('nitro.defaultLayout'));
+			}
+		}
+	}
+
+	return {
+		tplPath,
+		data,
+	};
+}
+
 function getView(req, res, next) {
-	var getViewCombinations = function getViewCombinations(action) {
-		var pathes = [action];
-		var positions = [];
-		var i, j;
-
-		for (i = 0; i < action.length; i++) {
-			if (action[i] === '-') {
-				positions.push(i);
-			}
-		}
-
-		var len = positions.length;
-		var combinations = [];
-
-		for (i = 1; i < ( 1 << len ); i++) {
-			var c = [];
-			for (j = 0; j < len; j++) {
-				if (i & ( 1 << j )) {
-					c.push(positions[j]);
-				}
-			}
-			combinations.push(c);
-		}
-
-		combinations.forEach(function (combination) {
-			var path = action;
-			combination.forEach(function (pos) {
-				path = replaceAt(path, pos, '/');
-			});
-			pathes.push(path);
-		});
-		return pathes;
-	};
-	var replaceAt = function replaceAt(string, index, character) {
-		return string.substr(0, index) + character + string.substr(index + character.length);
-	};
-
-	var tpl = req.params.view ? req.params.view.toLowerCase() : 'index';
-	var data = {
+	const tpl = req.params.view ? req.params.view.toLowerCase() : 'index';
+	const data = {
 		pageTitle: tpl,
-		_layout: cfg.nitro.default_layout,
-		_production: isProduction
+		_production: isProduction,
+		_offline: isOffline,
+		_minified: useMinifiedAssets,
 	};
-	var viewPathes = getViewCombinations(tpl);
-	var rendered = false;
+	const viewPathes = view.getViewCombinations(tpl);
+	let rendered = false;
 
-	viewPathes.forEach(function (viewPath) {
+	extend(true, data, res.locals);
+
+	viewPathes.forEach((viewPath) => {
 		if (!rendered) {
-			var tplPath = path.join(
-				cfg.nitro.base_path,
-				cfg.nitro.view_directory,
-				'/',
-				viewPath + '.' + cfg.nitro.view_file_extension
-			);
-
-			if (utils.fileExistsSync(tplPath)) {
-
-				// collect data
-				var dataPath = path.join(
-					cfg.nitro.base_path,
-					cfg.nitro.view_data_directory,
-					'/',
-					viewPath + '.json'
-				);
-				var customDataPath = req.query._data ? path.join(
-					cfg.nitro.base_path,
-					cfg.nitro.view_data_directory,
-					'/' + req.query._data + '.json'
-				) : false;
-
-				if (customDataPath && utils.fileExistsSync(customDataPath)) {
-					extend(true, data, JSON.parse(fs.readFileSync(customDataPath, 'utf8')));
-				}
-				else if (utils.fileExistsSync(dataPath)) {
-					extend(true, data, JSON.parse(fs.readFileSync(dataPath, 'utf8')));
-				}
-
-				// handle query string parameters
-				if (Object.keys(req.query).length !== 0) {
-					var reqQuery = JSON.parse(JSON.stringify(req.query)); // simple clone
-					dot.object(reqQuery);
-					extend(true, data, reqQuery);
-					data._query = reqQuery; // save query for use in components
-				}
-
-				// layout handling
-				if (data._layout) {
-					if (utils.layoutExists(data._layout)) {
-						data.layout = utils.getLayoutPath(data._layout);
-					}
-					else if (utils.layoutExists(cfg.nitro.default_layout)) {
-						data.layout = utils.getLayoutPath(cfg.nitro.default_layout);
-					}
-				}
-
-				// locals
-				extend(true, data, res.locals);
-				res.locals = data;
-
-				// render
-				res.render(tplPath);
+			const viewData = collectViewData(viewPath, data, req);
+			if (viewData) {
+				res.locals = viewData.data;
+				res.render(viewData.tplPath);
 				rendered = true;
 			}
 		}
@@ -136,14 +120,23 @@ router.get('/:view', getView);
 /**
  * everything else gets a 404
  */
-router.use(function (req, res) {
-	res.locals.pageTitle = '404 - Not Found';
-	res.locals._production = isProduction;
-	if (utils.layoutExists(cfg.nitro.default_layout)) {
-		res.locals.layout = utils.getLayoutPath(cfg.nitro.default_layout);
+router.use((req, res) => {
+	const data = {
+		pageTitle: '404 - Not Found',
+		_production: isProduction,
+		_offline: isOffline,
+		_minified: useMinifiedAssets,
+	};
+	const viewPath = '404';
+	extend(true, data, res.locals);
+
+	const viewData = collectViewData(viewPath, data, req);
+	if (viewData) {
+		res.locals = viewData.data;
 	}
+
 	res.status(404);
-	res.render('404', function (err, html) {
+	res.render(viewPath, (err, html) => {
 		if (err) {
 			res.send('404 - Not Found');
 		}

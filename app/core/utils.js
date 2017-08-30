@@ -1,43 +1,31 @@
-var fs = require('fs');
-var hbs = require('hbs');
-var path = require('path');
-var cfg = require('./config');
+'use strict';
 
-function fileExistsSync(filename) {
-	// Substitution for the deprecated fs.existsSync() method @see https://nodejs.org/api/fs.html#fs_fs_existssync_path
-	try {
-		fs.accessSync(filename);
-		return true;
-	}
-	catch (ex) {
-		return false;
-	}
-}
+const fs = require('fs');
+const path = require('path');
+const config = require('config');
 
-function logAndRenderError(e) {
-	console.info(e.message);
-	return new hbs.handlebars.SafeString(
-		'<p class="nitro-msg nitro-msg--error">' + e.message + '</p>'
-	);
-}
-
-function layoutExists(layoutName) {
-	var layoutPath = path.join(
-		cfg.nitro.base_path,
-		cfg.nitro.view_layouts_directory,
-		'/' + layoutName + '.' + cfg.nitro.view_file_extension
-	);
-	return fileExistsSync(layoutPath);
+function getLayoutName(layoutPath) {
+	const layoutPathWithoutViewPath = config.get('nitro.viewLayoutsDirectory').replace(`${config.get('nitro.viewDirectory')}/`, '');
+	const layoutName = layoutPath.replace(`${layoutPathWithoutViewPath}/`, '');
+	return layoutName;
 }
 
 function getLayoutPath(layoutName) {
-	var layoutPath = cfg.nitro.view_layouts_directory.replace(cfg.nitro.view_directory + '/', '') + '/' + layoutName;
+	const layoutPath = `${config.get('nitro.viewLayoutsDirectory').replace(config.get('nitro.viewDirectory') + '/', '')}/${layoutName}`;
 	return layoutPath;
 }
 
+function layoutExists(layoutName) {
+	const layoutPath = path.join(
+		config.get('nitro.basePath'),
+		config.get('nitro.viewLayoutsDirectory'),
+		`/${layoutName}.${config.get('nitro.viewFileExtension')}`
+	);
+	return fs.existsSync(layoutPath);
+}
+
 module.exports = {
-	fileExistsSync: fileExistsSync,
-	logAndRenderError: logAndRenderError,
-	layoutExists: layoutExists,
-	getLayoutPath: getLayoutPath
+	getLayoutName,
+	getLayoutPath,
+	layoutExists,
 };

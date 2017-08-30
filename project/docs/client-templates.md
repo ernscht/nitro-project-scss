@@ -7,7 +7,7 @@ For this to work you need a handlebars runtime on the client side.
 
 ### Template source
 
-The templates are generated from all files with the file type `.hbs` located in the directory `template` within a component.  
+The templates are generated from all files with the file type `.hbs` located in the directory `template` within a pattern.  
 The template name has not to contain slashes or special characters. Use only names with lowercase letters, dashes and dots.  
 
 ### Precompiled template
@@ -58,17 +58,17 @@ Precompiled partials will be stored in the same manner as templates.
 
 ### Helpers
 
-Clientside handlebars helpers can be stored as normal JavaScript files in the components folder or in `assets/js`.
+Clientside handlebars helpers can be stored as normal JavaScript files in the patterns folder or in `assets/js`.
 
-### Using the component one to one
+### Using the pattern one to one
 
-If you want to use the code of a serverside component unchanged for your clientside template you may use the nitro `component` helper for this. 
+If you want to use the code of a serverside pattern unchanged for your clientside template you may use the nitro `pattern` helper for this. 
 
-    {{component 'example'}}
+    {{pattern 'example'}}
 
 ## Handlebars versions
 
 Two handlebars versions are in use at the moment. They should have similar versions ;-)
 
-* One to render views for nitro and to precompile the templates on the server side (`hbs.handlebars` currently 4.0.3)
-* A handlebars runtime to render the precompiled template on the client side (`handlebars` currently 4.0.5 through bower)
+* One to render views for nitro and to precompile the templates on the server side (`hbs.handlebars` currently 4.0.5)
+* A handlebars runtime to render the precompiled template on the client side (`handlebars` currently 4.0.8)

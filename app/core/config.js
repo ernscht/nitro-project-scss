@@ -1,44 +1,111 @@
-var path = require('path');
-var fs = require('fs');
-var extend = require('extend');
+'use strict';
 
-function factory() {
-	var base_path = path.normalize(path.join(__dirname, '../../'));
-	var options = {
-		encoding: 'utf-8',
-		flag: 'r'
-	};
-	var config = JSON.parse(fs.readFileSync(base_path + 'config.json', options));
+const path = require('path');
+const fs = require('fs');
+const extend = require('extend');
+const basePath = path.normalize(path.join(__dirname, '../../'));
 
-	config.nitro = extend(true, {
-		base_path: base_path,
-		view_directory: 'views',
-		view_file_extension: 'html',
-		view_partials_directory: 'views/_partials',
-		view_data_directory: 'views/_data',
-		view_layouts_directory: 'views/_layouts',
-		placeholders_directory: 'views/_placeholders',
-		default_layout: 'default'
-	}, config.nitro);
-
-	config.code = extend(true, {
+const defaultConfig = {
+	// assets: {},
+	nitro: {
+		basePath,
+		viewFileExtension: 'html',
+		viewDirectory: 'views',
+		viewPartialsDirectory: 'views/_partials',
+		viewDataDirectory: 'views/_data',
+		viewLayoutsDirectory: 'views/_layouts',
+		placeholdersDirectory: 'views/_placeholders',
+		defaultLayout: 'default',
+		mode: {
+			livereload: true,
+			minified: false,
+			offline: false,
+		},
+		watch: {
+			partials: true,
+			throttle: {
+				base: 1000,
+				cache: 3000,
+			},
+		},
+		// patterns: {},
+	},
+	code: {
 		compatibility: {
-			browsers: ['> 1%', 'last 2 versions', 'ie 9', 'android 4', 'Firefox ESR', 'Opera 12.1']
+			browserslist: ['> 1%', 'last 2 versions', 'ie 9', 'android 4', 'Firefox ESR', 'Opera 12.1'],
+		},
+		validation: {
+			eslint: {
+				live: true,
+			},
+			htmllint: {
+				live: true,
+			},
+			jsonSchema: {
+				live: true,
+			},
+			stylelint: {
+				live: true,
+			},
+		},
+	},
+	server: {
+		port: 8080,
+		proxy: 8081,
+		production: process.env.NODE_ENV && process.env.NODE_ENV.replace((/\s/g), '') === 'production' ? true : false,
+	},
+};
+
+// get legacy config and convert properties to camelCase
+function convertToCamelCase(key) {
+	return key.replace(/_(.)/g, (match, group1) => {
+		return group1.toUpperCase();
+	});
+}
+function getLegacyConfig() {
+	let config = {};
+	const legacyConfigFile = `${basePath}config.json`;
+	const readOptions = {
+		encoding: 'utf-8',
+		flag: 'r',
+	};
+
+	if (fs.existsSync(legacyConfigFile)) {
+		console.log('-------------------------------------------------------');
+		console.log('Attention: you still use the outdated config system 1.x with `config.json`.');
+		console.log('You should migrate to the new config system 2.x');
+		console.log('-------------------------------------------------------');
+		config = JSON.parse(fs.readFileSync(legacyConfigFile, readOptions));
+		if (config.nitro) {
+			// view_file_extension -> viewFileExtension, ...
+			// (and conversion of other properties from underline notation to camelCase)
+			config.nitro = Object.keys(config.nitro).reduce((result, key) => {
+				result[convertToCamelCase(key)] = config.nitro[key];
+				return result;
+			}, {});
+
+			if (config.nitro.compatibility && config.nitro.compatibility.browsers) {
+				// config.nitro.compatibility.browsers -> config.nitro.compatibility.browserslist
+				config.nitro.compatibility.browserslist = config.nitro.compatibility.browsers;
+				delete config.nitro.compatibility.browsers;
+			}
+
+			if (config.nitro.patterns) {
+				// pattern_prefix -> patternPrefix
+				Object.keys(config.nitro.patterns).forEach((pattern) => {
+					config.nitro.patterns[pattern] = Object.keys(config.nitro.patterns[pattern]).reduce((result, key) => {
+						result[convertToCamelCase(key)] = config.nitro.patterns[pattern][key];
+						return result;
+					}, {});
+				});
+			}
 		}
-	}, config.code);
-
-	config.server = {
-		port: process.env.PORT || 8080,
-		proxy: process.env.PROXY || 8081,
-		// windows may have white spaces in env var
-		production: process.env.NODE_ENV && process.env.NODE_ENV.replace((/\s/g),'') === 'production'
-	};
-
-	config.reload = function () {
-		return factory();
-	};
+	}
 
 	return config;
 }
 
-module.exports = factory();
+// merge with default config
+const config = extend(true, {}, defaultConfig, getLegacyConfig());
+
+module.exports = config;

@@ -1,13 +1,15 @@
-var express = require('express');
-var app = express();
-var config = require('./app/core/config');
-var router = require('./app/core/router');
-var hbs = require('./app/core/hbs');
-var compression = require('compression');
-var bodyParser = require('body-parser');
+'use strict';
+
+const express = require('express');
+const app = express();
+const config = require('config');
+const router = require('./app/core/router');
+const hbs = require('./app/templating/hbs/engine');
+const compression = require('compression');
+const bodyParser = require('body-parser');
 
 // partials
-require('./app/core/hbs-partials')(hbs);
+require('./app/templating/hbs/partials')(hbs);
 
 // compress all requests
 app.use(compression());
@@ -19,9 +21,9 @@ require('./app/core/i18n')(app);
 require('./app/core/routeLoader')(app);
 
 app.use(router);
-app.use(bodyParser.urlencoded({extended: true}));
-app.set('view engine', config.nitro.view_file_extension);
-app.set('views', config.nitro.base_path + config.nitro.view_directory);
-app.engine(config.nitro.view_file_extension, hbs.__express);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine', config.get('nitro.viewFileExtension'));
+app.set('views', config.get('nitro.basePath') + config.get('nitro.viewDirectory'));
+app.engine(config.get('nitro.viewFileExtension'), hbs.__express);
 
 require('./app/core/listen')(app);

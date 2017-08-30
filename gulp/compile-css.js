@@ -1,56 +1,78 @@
-var utils = require('./utils');
-var Promise = require('es6-promise').Promise;
-var globby = require('globby');
-var fs = require('fs');
-var autoprefixer = require('autoprefixer');
+'use strict';
 
-module.exports = function (gulp, plugins) {
-	return function () {
-		var assets = utils.getSourcePatterns('css');
-		var browserCompatibility = utils.getBrowserCompatibility();
-		var browserSync = utils.getBrowserSyncInstance();
-		var promises = [];
+const utils = require('./utils');
+const Promise = require('es6-promise').Promise;
+const globby = require('globby');
+const fs = require('fs');
+const autoprefixer = require('autoprefixer');
+const config = require('config');
+const lintCss = Boolean(config.get('code.validation.stylelint.live'));
+const bannerData = {
+	date: new Date().toISOString().slice(0, 19),
+	pkg: require('../package.json'),
+};
+const banner = ['/*! ',
+	' * <%= bannerData.pkg.name %>',
+	' * @version v<%= bannerData.pkg.version %>',
+	' * @date <%= bannerData.date %>',
+	' */',
+	''].join('\n');
 
-		assets.forEach(function (asset) {
-			promises.push(new Promise(function (resolve) {
-				var processors = [
+module.exports = (gulp, plugins) => {
+	return () => {
+		const assets = utils.getSourcePatterns('css');
+		const browserCompatibility = utils.getBrowserCompatibility();
+		const browserSync = utils.getBrowserSyncInstance();
+		const promises = [];
+
+		assets.forEach((asset) => {
+			promises.push(new Promise((resolve) => {
+				const processors = [
 					autoprefixer({
 						browsers: browserCompatibility,
-						cascade: true
-					})
+						cascade: true,
+					}),
 				];
-				var imports = '';
+				let imports = '';
 
-				globby.sync(asset.deps).forEach(function (path) {
+				globby.sync(asset.deps).forEach((path) => {
 					imports += fs.readFileSync(path, 'utf8');
 				});
 
-				gulp.src(asset.src, {base: '.'})
+				gulp.src(asset.src, { base: '.' })
 					.pipe(plugins.plumber())
 					.pipe(plugins.cached(asset.name))
-					.pipe(plugins.sourcemaps.init({loadMaps: true}))
-					.pipe(plugins.stylelint({
+					.pipe(plugins.sourcemaps.init({ loadMaps: true }))
+					.pipe(plugins.if(lintCss, plugins.stylelint({
 						failAfterError: false,
 						syntax: 'scss',
 						reporters: [
-							{formatter: 'string', console: true}
-						]
-					}))
+							{
+								formatter: 'string',
+								console: true,
+							},
+						],
+					})))
 					.pipe(plugins.header(imports, false))
 					.pipe(plugins.sass().on('error', plugins.sass.logError ))
 					.pipe(plugins.postcss(processors))
 					.pipe(plugins.remember(asset.name))
 					.pipe(plugins.concat(asset.name))
+					.pipe(plugins.header(banner, { bannerData }))
 					.pipe(plugins.sourcemaps.write('.'))
+					.pipe(plugins.plumber.stop())
 					.pipe(gulp.dest('public/assets/css/'))
-					.on('end', function () {
+					.on('end', () => {
 						resolve();
-					})
-					.pipe(browserSync.stream());
+					});
 			}));
 		});
 
-		return Promise.all(promises);
+		return Promise.all(promises)
+			.then(() => {
+				if (config.get('nitro.mode.livereload')) {
+					browserSync.reload('*.css');
+				}
+			});
 	};
 };
-

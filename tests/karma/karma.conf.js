@@ -18,7 +18,7 @@ module.exports = function (config) {
 		// list of files / patterns to load in the browser
 		files: [
 			'public/assets/js/app.js',
-			'patterns/**/spec/*Spec.js',
+			'src/patterns/**/test/*.test.js',
 		],
 
 		// list of files to exclude
@@ -27,11 +27,11 @@ module.exports = function (config) {
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors: {
-			'patterns/**/spec/*Spec.js': ['babel'],
+			'src/patterns/**/test/*.test.js': ['babel'],
 		},
 		babelPreprocessor: {
 			options: {
-				presets: ['es2015'],
+				presets: ['env'],
 				sourceMap: 'inline',
 			},
 		},
@@ -63,6 +63,10 @@ module.exports = function (config) {
 			// Have phantomjs exit if a ResourceError is encountered (useful if karma exits without killing phantom)
 			exitOnResourceError: true,
 		},
+
+		// transport methods between the browser and testing server
+		// not using 'websocket' prevents PhantomJS crashes on some systems
+		transports: ['polling'],
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits

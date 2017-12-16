@@ -8,8 +8,11 @@ _.*
 .idea
 .vscode
 .cache
+!*.cache
 .settings
+!*.settings
 .config
+!*.config
 .buildpath
 .metadata
 .tmp*
@@ -17,18 +20,25 @@ _.*
 .deployables
 atlassian-ide-plugin.xml
 
-# Project
+# Project (deprecated)
 /assets/vendor
 /components/**/template/*.js
 /components/**/template/partial/*.js
+/patterns/**/template/*.js
+/patterns/**/template/partial/*.js
+
+# Project
 /config/local*
+debug.log
 /dist
 /node_modules
 npm-debug.log
-/patterns/**/template/*.js
-/patterns/**/template/partial/*.js
 /project/tmp
 /public/assets
+/public/proto
+/public/reports
+/src/patterns/**/template/*.js
+/src/patterns/**/template/partial/*.js
 /.servepid
 
 # Build

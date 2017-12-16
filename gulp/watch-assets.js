@@ -56,8 +56,8 @@ module.exports = (gulp, plugins) => {
 		const browserSync = utils.getBrowserSyncInstance();
 
 		plugins.watch([
-			'assets/css/**/*.scss',
-			'patterns/**/css/**/*.scss',
+			'src/assets/css/**/*.scss',
+			'src/patterns/**/css/**/*.scss',
 		], (e) => {
 			processChange('css', () => {
 				checkCssCache(e);
@@ -66,9 +66,9 @@ module.exports = (gulp, plugins) => {
 		});
 
 		plugins.watch([
-			'assets/js/**/*.js',
-			'patterns/**/js/**/*.js',
-			'patterns/**/template/**/*.hbs',
+			'src/assets/js/**/*.js',
+			'src/patterns/**/js/**/*.js',
+			'src/patterns/**/template/**/*.hbs',
 		], () => {
 			processChange('js', () => {
 				gulp.start('compile-js');
@@ -76,12 +76,30 @@ module.exports = (gulp, plugins) => {
 		});
 
 		plugins.watch([
-			`views/**/*.${config.get('nitro.viewFileExtension')}`,
+			'src/proto/css/*.scss',
+			'src/patterns/**/proto/**/*.scss'
+		], () => {
+			processChange('css.prototype', function() {
+				gulp.start('compile-css-proto');
+			});
+		});
+
+		plugins.watch([
+			'src/proto/js/*.js',
+			'src/patterns/**/proto/**/*.js'
+		], () => {
+			processChange('js.prototype', function() {
+				gulp.start('compile-js-proto');
+			});
+		});
+
+		plugins.watch([
+			`src/views/**/*.${config.get('nitro.viewFileExtension')}`,
 			`${config.get('nitro.viewDataDirectory')}/**/*.json`,
-			`patterns/**/*.${config.get('nitro.viewFileExtension')}`,
-			'!patterns/**/template/**/*.hbs',
-			'patterns/**/schema.json',
-			'patterns/**/_data/*.json',
+			`src/patterns/**/*.${config.get('nitro.viewFileExtension')}`,
+			'!src/patterns/**/template/**/*.hbs',
+			'src/patterns/**/schema.json',
+			'src/patterns/**/_data/*.json',
 		], () => {
 			processChange('data', () => {
 				if (config.get('nitro.mode.livereload')) {
@@ -91,19 +109,19 @@ module.exports = (gulp, plugins) => {
 		});
 
 		plugins.watch([
-			'assets/img/**/*',
+			'src/assets/img/**/*',
 		], () => {
 			gulp.start('minify-img');
 		});
 
 		plugins.watch([
-			'patterns/atoms/icon/img/icons/*.svg',
+			'src/patterns/atoms/icon/img/icons/*.svg',
 		], () => {
 			gulp.start('svg-sprite');
 		});
 
 		plugins.watch([
-			'assets/font/**/*',
+			'src/assets/font/**/*',
 		], () => {
 			gulp.start('copy-assets');
 		});

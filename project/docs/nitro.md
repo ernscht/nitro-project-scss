@@ -21,8 +21,9 @@ Nitro is simple, fast and flexible. Use this app for all your frontend work.
 
 This application was created by the yeoman generator for nitro.  
 Before using, you need of course [node](https://nodejs.org/) installed.
-Nitro is tested with the current LTS versions of the node.js releases 4 and 6
-and should also work with node.js release 8.  
+Nitro is tested with the current 
+["Active LTS" versions of node.js](https://github.com/nodejs/Release#release-schedule) (release 6.x and 8.x).
+
 And also you need [yarn](https://www.npmjs.com/package/yarn), 
 the [yeoman cli tool](https://www.npmjs.com/package/yo) and
 the yeoman [generator-nitro](https://www.npmjs.com/package/generator-nitro) installed globally.
@@ -362,6 +363,11 @@ If you need a different layout for a page, do so in the corresponding view data 
 http://localhost:8080/index?_layout=home
 ```
 
+##### Side Note About Extending Data
+
+Don't overload the view data. It will be deep extended with other data from patterns, request parameters, ....  
+It's not recommended to use view data for data variations of patterns.
+
 #### Dynamic view data
 
 If you want to use dynamic view data (i.e. using data from a database or data which is available in different views),
@@ -375,11 +381,7 @@ Pattern data will overwrite data from views. (Use as described above)
 
 You may overwrite data from views & patterns in request parameters.
 
-`?pageTitle=Testpage` will overwrite the data for the handlebars expression `{{pageTitle}}`
-
-It's also possible to use dot notation for object data:
-
-`?page.title=Testpage` will overwrite the value for `{{page.title}}`
+`?_nitro.pageTitle=Testpage` will overwrite the data for the handlebars expression `{{_nitro.pageTitle}}`
 
 ## Assets
 
@@ -387,6 +389,10 @@ One of Nitro's main feature is asset concatenation for CSS and JavaScript files.
 If changed, the files will be updated on every change, therefore you'll always get the latest version.
 
 You can configure the include order of your assets by defining patterns in [config](nitro-config.md).
+
+### Prototype Assets
+
+Place [code for development](../../src/proto/readme.md) in the corresponding directories.
 
 ## Translations
 
@@ -543,7 +549,7 @@ You may [change this or add other hooks](../.githooks/readme.md) in `project/.gi
 
 * [YUI CSS Reset 3.18.1](http://yuilibrary.com/yui/docs/cssreset/)
 * Favicon & Home-Icons from Nitro (replace with your own)
-* Pattern `example` and `icon` and some styles in assets/css (you don't need them)
+* Pattern `example` and `icon` and some styles in src/assets/css (you don't need them)
 
 #### Client Dependencies
 
@@ -556,4 +562,4 @@ The following packages are installed by the [app](#name) generator as dependenci
 
 ### Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 2.0.4).
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 3.0.3).

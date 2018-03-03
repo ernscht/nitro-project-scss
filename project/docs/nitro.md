@@ -16,6 +16,7 @@ Nitro is simple, fast and flexible. Use this app for all your frontend work.
 * Jasmine tests with Karma test runner
 * Yeoman pattern generator
 * [Client side templates](client-templates.md)
+* [Static Exports](nitro-exporter.md)
 
 ## Preparation
 
@@ -55,7 +56,7 @@ yarn install
 Use
 
 ```
-yarn dev
+yarn start
 ```
 
 ... to start in development mode
@@ -78,7 +79,7 @@ The Nitro app will run on port `8080` by default, the proxy on `8081` (only run 
 If you want the app to run on another port put them before the start task like this:
 
 ```
-PORT=8000 PROXY=8001 yarn dev
+PORT=8000 PROXY=8001 yarn start
 ```
 
 The port to be used in production can be set the same way:
@@ -90,16 +91,27 @@ PORT=3000 node server
 This works a bit different on **Windows**. Use the following commands in prompt:
 
 ```
-set PORT=8000 && set PROXY=8001 && yarn dev
+set PORT=8000 && set PROXY=8001 && yarn start
 set PORT=3000 && node server
 set NODE_ENV=production && yarn prod
 ```
 
 ## Configuring
 
+### Config Package
+
 Nitro uses the flexible [config package](https://www.npmjs.com/package/config) for project configuration. 
 This lets you to extend the default configuration for different deployment environments or local usage.  
 See details in [config readme](nitro-config.md)
+
+### Global Configuration
+
+Some global configuration is placed in `package.json`
+
+#### Target Browsers
+
+For defining target browsers, [browserslist](https://github.com/ai/browserslist) is used.    
+This config is shareable between different frontend tools. If not defined, the default browsers from browserslist would be taken.
 
 ## Daily Work - Creating Patterns & Pages
 
@@ -117,7 +129,7 @@ A pattern uses the following structure:
 
 ```
 /example
-/example/example.html
+/example/example.hbs
 /example/schema.json
 /example/css/example.css
 /example/js/example.js
@@ -137,13 +149,19 @@ Different data variations have to be placed in the `_data` folder:
 /example/_data/example-variant.json
 ```
 
-### Creating patterns with yo
+### Creating pattern with npm script
 
 ```
-yo nitro:pattern
+yarn create-pattern
 ```
 
 This will copy the templates (nitro.patterns.<type>.template) from config to the configured target.
+
+Optionally you can give the name:
+
+```
+yarn create-pattern <name>
+```
 
 ### Creating pattern elements
 
@@ -154,7 +172,7 @@ Element `example-sub` in pattern `example`:
 
 ```
 /example/elements/example-sub
-/example/elements/example-sub/example-sub.html
+/example/elements/example-sub/example-sub.hbs
 /example/elements/example-sub/css/example-sub.css
 /example/elements/example-sub/js/example-sub.js
 /example/elements/example-sub/_data/example-sub.json
@@ -164,12 +182,12 @@ It's recommended to start the name of a subpattern with the pattern name.
 
 ### Creating pages
 
-Create a new `*.html` file in the `views` folder. (You can make as many subfolders as you want.)
+Create a new `*.hbs` file in the `views` folder. (You can make as many subfolders as you want.)
 
 ```
-/views/index.html
-/views/content.html
-/views/content/variant.html
+/views/index.hbs
+/views/content.hbs
+/views/content/variant.hbs
 ```
 
 Your new page can then be called by the according URL (with or without an extension).  
@@ -184,7 +202,7 @@ http://localhost:8080/content-variant
 #### Layout
 
 By default views use a simple layout mechanism.
-The default layout template `views/_layouts/default.html` is used for every view.
+The default layout template `views/_layouts/default.hbs` is used for every view.
 The block `{{{body}}}` includes the contents from a view.
 
 Simple default layout:
@@ -210,14 +228,14 @@ pattern name is case-sensitive and should be unique.
 
 Nitro uses [handlebars](https://www.npmjs.com/package/hbs) as the view engine and provides custom helpers.
 
-Render the example pattern (file: `example.html`, data-file: `example.json`):
+Render the example pattern (file: `example.hbs`, data-file: `example.json`):
 
 ```
 {{pattern name='example'}}
 {{pattern name='example' data='example'}}
 ```
 
-Render a "variant" from the example pattern (file: `example.html`, data-file: `example-variant.json`):
+Render a "variant" from the example pattern (file: `example.hbs`, data-file: `example-variant.json`):
 
 ```
 {{pattern name='example' data='example-variant'}}
@@ -229,7 +247,7 @@ There also is a possibility to pass data to subpatterns by providing a data obje
 {{pattern name='example' data=exampleContent}}
 ```
 
-...and if you really need this you may provide a second template file. (file: `example-2.html`, data-file: `example-variant.json`)
+...and if you really need this you may provide a second template file. (file: `example-2.hbs`, data-file: `example-variant.json`)
 
 ```
 {{pattern name='example' data='example-variant' template='example-2'}}
@@ -248,7 +266,7 @@ A simplified but less clear variant is to use the pattern helper with one or two
 * the first parameter: pattern folder with the default template file
 * the second parameter (optional): the data-file to be used
 
-Render the example pattern (file: `example.html`, data-file: `example.json`):
+Render the example pattern (file: `example.hbs`, data-file: `example.json`):
 
 ```
 {{pattern 'example'}}
@@ -290,12 +308,12 @@ The pattern helper will find also pattern elements.
 
 ... looks for following paths
 
-- Pattern with name `example-sub`: `<type>/example-sub/example-sub.html`
-- Element with name `example-sub`: `<type>/*/elements/example-sub/example-sub.html`
+- Pattern with name `example-sub`: `<type>/example-sub/example-sub.hbs`
+- Element with name `example-sub`: `<type>/*/elements/example-sub/example-sub.hbs`
 
 ### Render partials
 
-Render a partial (HTML snippet). Partials are placed in `views/_partials/` as `*.html` files (e.g. `head.html`).
+Render a partial (HTML snippet). Partials are placed in `views/_partials/` as `*.hbs` files (e.g. `head.hbs`).
 
 ```
 {{> head}}
@@ -303,12 +321,12 @@ Render a partial (HTML snippet). Partials are placed in `views/_partials/` as `*
 
 Partials are registered with [hbs-utils](https://www.npmjs.com/package/hbs-utils#partials), 
 so keep in mind that every space or hyphen in filenames is replaced with an underscore.
-(e.g. use `{{> file_name}}` to load `views/_partials/file-name.html`)
+(e.g. use `{{> file_name}}` to load `views/_partials/file-name.hbs`)
 
 ### Render placeholders
 
-Using a placeholder is another way to output some markup. Placeholders are placed in a folder inside `views/_placeholders/` as `*.html` files.  
-The following two examples do the same and render the file `content/example.html` from `views/_placeholders/`.
+Using a placeholder is another way to output some markup. Placeholders are placed in a folder inside `views/_placeholders/` as `*.hbs` files.  
+The following two examples do the same and render the file `content/example.hbs` from `views/_placeholders/`.
 
 ```
 {{placeholder 'content' 'example'}}
@@ -323,11 +341,11 @@ You may pass data to your templates (view, layout, partial, pattern) per view.
 Put a file with the same name as the view in the folder `views/_data/` with the file extension `.json`. (Use the same folder structure as in `views`)
 
 ```
-/views/index.html
+/views/index.hbs
 /views/_data/index.json
 http://localhost:8080/index
 
-/views/content/variant.html
+/views/content/variant.hbs
 /views/_data/content/variant.json
 http://localhost:8080/content-variant
 ```
@@ -335,7 +353,7 @@ http://localhost:8080/content-variant
 It's also possible to use a custom data file by requesting with a query param `?_data=...`:
 
 ```
-/views/index.html
+/views/index.hbs
 /views/_data/index-test.json
 http://localhost:8080/index?_data=index-test
 ```
@@ -351,15 +369,15 @@ If you need a different layout for a page, do so in the corresponding view data 
         "_layout": "home"
     }
 
-    /views/_layouts/home.html
+    /views/_layouts/home.hbs
     http://localhost:8080/index
 ```
 
 ...or you may change the layout temporarily by requesting a page with the query param `?_layout=...`
 
 ```
-/views/index.html
-/views/_layouts/home.html
+/views/index.hbs
+/views/_layouts/home.hbs
 http://localhost:8080/index?_layout=home
 ```
 
@@ -460,7 +478,7 @@ All files must be lowercase. It's allowed to use uppercase letters for pattern f
 {{pattern name='NavMain'}}
 ```
 
-... looks for a template `navmain.html` in the folder `NavMain`.
+... looks for a template `navmain.hbs` in the folder `NavMain`.
 
 Note that uppercase letters in pattern names are represented in CSS with hyphens.
 
@@ -562,4 +580,4 @@ The following packages are installed by the [app](#name) generator as dependenci
 
 ### Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 3.0.3).
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 3.3.1).

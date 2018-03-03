@@ -5,7 +5,7 @@ const helper = require('../../../templating/hbs/helpers/pattern');
 describe('Pattern Helper', () => {
 
 	it('returns an error message if module is unknown', () => {
-		expect(helper('inexistent')).toMatch('<p class="nitro-msg nitro-msg--error">Pattern `inexistent` with template file `inexistent.html` not found in folder `inexistent`.</p>');
+		expect(helper('inexistent')).toMatch('<p class="nitro-msg nitro-msg--error">Pattern `inexistent` with template file `inexistent.hbs` not found in folder `inexistent`.</p>');
 	});
 
 	it('returns an object containing a string if module was found', () => {

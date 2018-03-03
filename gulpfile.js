@@ -3,6 +3,8 @@
 const gulp = require('gulp');
 const getTask = require('./gulp/utils').getTask;
 const gulpSequence = require('gulp-sequence').use(gulp);
+const config = require('config');
+require('nitro-exporter')(gulp, config);
 
 gulp.task('sync-githooks', getTask('sync-githooks'));
 gulp.task('compile-css', getTask('compile-css'));
@@ -21,7 +23,6 @@ gulp.task('assets', ['svg-sprite', 'copy-assets', 'minify-img', 'minify-js', 'mi
 gulp.task('assets-proto', ['compile-css-proto', 'compile-js-proto']);
 gulp.task('watch-assets', ['assets', 'assets-proto'], getTask('watch-assets'));
 gulp.task('serve', getTask('serve'));
-gulp.task('serve-stop', getTask('serve-stop'));
 gulp.task('watch-serve', ['serve'], getTask('watch-serve'));
 gulp.task('develop', ['watch-assets', 'watch-serve']);
 gulp.task('build', gulpSequence(['clean-assets', 'clean-templates'], 'assets'));

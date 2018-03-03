@@ -3,14 +3,20 @@
     "name": "nitro-scss",
     "preprocessor": "scss",
     "jscompiler": "JavaScript",
-    "viewExtension": "html",
-    "clientTemplates": true
+    "viewExtension": "hbs",
+    "clientTemplates": true,
+	"exampleCode": true,
+	"exporter": true,
+	"release": false
   },
   "generator-nitro-dev": {
     "name": "nitro-scss",
     "preprocessor": "scss",
     "jscompiler": "JavaScript",
-    "viewExtension": "html",
-    "clientTemplates": true
+    "viewExtension": "hbs",
+    "clientTemplates": true,
+	"exampleCode": true,
+	"exporter": true,
+	"release": false
   }
 }

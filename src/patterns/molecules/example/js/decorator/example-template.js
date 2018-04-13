@@ -1,69 +1,71 @@
-((($) => {
-	'use strict';
-	/**
-	 * Template decorator implementation for the Example module.
-	 *
-	 * @author Pre Name <pre.name@domain.com>
-	 */
-	T.Module.Example.Template = T.createDecorator({
-		start(resolve) {
-			const $ctx = $(this._ctx);
+'use strict';
 
-			$ctx.on('click', '.js-m-example__add', () => {
-				if (T.tpl && T.tpl.example) {
-					const tplData = {
-						decorator: 'Template',
-						title: 'Client Side Rendered Example Module',
-						links: [
-							{
-								uri: 'index',
-								text: 'Link One',
-							},
-							{
-								uri: 'index',
-								text: 'Link Two',
-							},
-						],
-					};
-					const pattern = T.tpl.example(tplData);
-					const $pattern = $(pattern);
+import * as T from 'terrific';
+import $ from 'jquery';
 
-					this._sandbox.addModules($pattern.get(0));
-					$ctx.after($pattern);
+const templateExample = require('../../template/example.hbs');
+const templateExampleLinks = require('../../template/example.links.hbs');
 
-					/* eslint-disable no-console */
-					console.log(`Client Side Template Example rendered [id:${$pattern.data('t-id')}]`);
-					/* eslint-enable no-console */
-				}
-			});
+/**
+ * Template decorator implementation for the Example module.
+ *
+ * @author Pre Name <pre.name@domain.com>
+ */
+T.Module.Example.Template = T.createDecorator({
+	start(resolve) {
+		const $ctx = $(this._ctx);
 
-			$ctx.on('click', '.js-m-example__more', () => {
-				if (T.tpl && T.tpl.example && T.tpl.example.links) {
-					const tplData = {
-						links: [
-							{
-								uri: 'index',
-								text: 'One more link',
-							},
-							{
-								uri: 'index',
-								text: 'Another link',
-							},
-						],
-					};
-					const links = T.tpl.example.links(tplData);
-					const $links = $(links);
+		$ctx.on('click', '.js-m-example__add', () => {
+			const tplData = {
+				decorator: 'Template',
+				title: 'Client Side Rendered Example Module',
+				links: [
+					{
+						uri: 'index',
+						text: 'Link One',
+					},
+					{
+						uri: 'index',
+						text: 'Link Two',
+					},
+				],
+			};
+			const pattern = templateExample(tplData);
+			const $pattern = $(pattern);
 
-					$ctx.find('.js-m-example__list').append($links);
-				}
-			});
+			this._sandbox.addModules($pattern.get(0));
+			$ctx.after($pattern);
 
 			/* eslint-disable no-console */
-			console.log(`Example Decorator Template - start id: [${$ctx.data('t-id')}]`);
+			console.log(`Client Side Template Example rendered [id:${$pattern.data('t-id')}]`);
 			/* eslint-enable no-console */
+		});
 
-			// calling original method
-			this._parent.start(resolve);
-		},
-	});
-})(jQuery));
+		$ctx.on('click', '.js-m-example__more', () => {
+			const tplData = {
+				links: [
+					{
+						uri: 'index',
+						text: 'One more link',
+					},
+					{
+						uri: 'index',
+						text: 'Another link',
+					},
+				],
+			};
+			const links = templateExampleLinks(tplData);
+			const $links = $(links);
+
+			$ctx.find('.js-m-example__list').append($links);
+		});
+
+		/* eslint-disable no-console */
+		console.log(`Example Decorator Template - start id: [${$ctx.data('t-id')}]`);
+		/* eslint-enable no-console */
+
+		// calling original method
+		this._parent.start(resolve);
+	},
+});
+

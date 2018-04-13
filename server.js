@@ -8,6 +8,9 @@ const hbs = require('./app/templating/hbs/engine');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 
+// webpack
+require('./app/core/webpack')(app);
+
 // partials
 require('./app/templating/hbs/partials')(hbs);
 

@@ -6,18 +6,18 @@
   "private": true,
   "author": "The Nitro Team",
   "engines": {
-    "node": ">=6 <9",
-    "npm": ">=3 <6"
+    "node": ">=8 <11",
+    "npm": ">=5 <6"
   },
   "scripts": {
     "create-pattern": "yo nitro:pattern",
     "githooks": "gulp sync-githooks",
     "lint": "npm-run-all lint:*",
     "lint:accessibility": "gulp lint-accessibility",
-    "lint:css": "stylelint src/assets/**/*.*ss src/patterns/**/*.*ss",
+    "lint:css": "stylelint src/patterns/**/*.*ss",
     "lint:data": "node app/scripts/validate-pattern-data.js",
     "lint:html": "gulp lint-html",
-    "lint:js": "eslint ./src/patterns ./src/assets/js",
+    "lint:js": "eslint ./src/patterns ./src/share ./src/*.js",
     "lint:license": "license-checker --production --summary --exclude \"Apache-2.0, BSD, ISC, LGPL, MIT, MPL\" --failOn \"AGPL; EPL; GPL\"",
     "postinstall": "npm rebuild node-sass && yarn githooks",
     "prepublish": "nsp check --output summary",
@@ -27,12 +27,26 @@
     "test": "npm-run-all test:*",
     "test:lint": "yarn lint",
     "test:karma": "gulp test",
-    "prebuild": "yarn test",
-    "build": "gulp build",
-    "export": "gulp export",
-    "dev": "gulp develop",
-    "prod": "cross-env NODE_ENV=production gulp production",
-    "start": "yarn dev"
+    "XXXprebuild": "yarn test",
+
+    "build": "npm-run-all build:*",
+    "build:clean": "rimraf public/assets",
+    "build:assets": "gulp assets",
+    "build:webpack": "webpack --mode production --config config/webpack/webpack.config.prod.js",
+
+    "export": "yarn run build && gulp export",
+
+    "dev": "cross-env WEBPACK_CONFIG=../../config/webpack/webpack.config.dev.js gulp develop",
+
+    "prod": "npm-run-all prod:*",
+    "prod:build": "yarn build",
+    "prod:serve": "cross-env NODE_ENV=production gulp serve",
+
+    "start": "npm-run-all start:*",
+    "start:dev": "yarn dev",
+
+    "XXXbuild-dev": "webpack --mode development --config config/webpack/webpack.config.dev.js",
+    "XXXstart-dev": "cross-env WEBPACK_CONFIG=../../config/webpack/webpack.config.dev.js node server"
   },
   "keywords": [
     "frontend",
@@ -46,6 +60,7 @@
     "babel-polyfill": "6.26.0",
     "handlebars": "4.0.11",
     "jquery": "3.3.1",
+    "lodash": "4.17.5",
     "terrific": "3.0.0"
   },
   "devDependencies": {
@@ -55,7 +70,7 @@
     "autoprefixer": "8.3.0",
     "babel-core": "6.26.0",
     "babel-preset-env": "1.6.1",
-    "backstopjs": "3.1.21",
+    "backstopjs": "3.2.15",
     "body-parser": "1.18.2",
     "browser-sync": "2.23.6",
     "chalk": "2.4.0",
@@ -74,34 +89,21 @@
     "globby": "7.1.1",
     "gulp": "3.9.1",
     "gulp-accessibility": "3.1.1",
-    "gulp-babel": "7.0.1",
     "gulp-cached": "1.1.1",
     "gulp-change": "1.0.0",
-    "gulp-concat": "2.6.1",
-    "gulp-cssnano": "2.1.3",
     "gulp-declare": "0.3.0",
-    "gulp-eslint": "4.0.2",
-    "gulp-handlebars": "5.0.2",
     "gulp-header": "2.0.5",
     "gulp-htmllint": "0.0.15",
-    "gulp-if": "2.0.2",
     "gulp-imagemin": "4.1.0",
     "gulp-live-server": "0.0.31",
     "gulp-load-plugins": "1.5.0",
     "gulp-newer": "1.4.0",
     "gulp-plumber": "1.2.0",
-    "gulp-postcss": "7.0.1",
-    "gulp-remember": "1.0.1",
     "gulp-remote-src": "0.4.3",
     "gulp-rename": "1.2.2",
-    "gulp-sass": "3.2.1",
     "gulp-sequence": "1.0.0",
-    "gulp-size": "3.0.0",
-    "gulp-sourcemaps": "2.6.4",
-    "gulp-stylelint": "3.9.0",
     "gulp-svgmin": "1.2.4",
     "gulp-svgstore": "6.1.1",
-    "gulp-uglify": "3.0.0",
     "gulp-watch": "5.0.0",
     "gulp-wrap": "0.13.0",
     "hbs": "4.0.1",
@@ -126,7 +128,34 @@
     "stylelint": "9.2.0",
     "text-table": "0.2.0",
     "yargs": "11.0.0",
-    "yo": "2.0.2"
+    "yo": "2.0.2",
+
+
+    "rimraf": "2.6.2",
+
+    "webpack": "4.6.0",
+    "webpack-cli": "2.0.14",
+    "webpack-dev-middleware": "3.1.2",
+    "webpack-hot-middleware": "2.22.1",
+
+    "mini-css-extract-plugin": "0.4.0",
+    "sass-loader": "7.0.1",
+    "node-sass": "4.8.3",
+    "style-loader": "0.21.0",
+    "css-loader": "0.28.11",
+    "postcss-loader": "2.1.4",
+    "stylelint-webpack-plugin": "0.10.4",
+
+    "eslint-friendly-formatter": "4.0.1",
+    "eslint-loader": "2.0.0",
+    "uglifyjs-webpack-plugin": "1.2.5",
+    "optimize-css-assets-webpack-plugin": "4.0.0",
+
+    "babel-loader": "7.1.4",
+    "handlebars-loader": "1.7.0",
+    "babel-preset-react": "6.24.1",
+    "react": "16.3.2",
+    "react-dom": "16.3.2"
   },
   "browserslist": [
     "> 0.5%",

@@ -25,25 +25,7 @@ Before using, you need of course [node](https://nodejs.org/) installed.
 Nitro is tested with the current 
 ["Active LTS" versions of node.js](https://github.com/nodejs/Release#release-schedule) (release 6.x and 8.x).
 
-And also you need [yarn](https://www.npmjs.com/package/yarn), 
-the [yeoman cli tool](https://www.npmjs.com/package/yo) and
-the yeoman [generator-nitro](https://www.npmjs.com/package/generator-nitro) installed globally.
-
-```
-npm install -g yarn yo generator-nitro
-```
-
-Keep your global packages up to date:
-
-```
-npm outdated -g --depth=0
-```
-
-Make an update if necessary:
-
-```
-npm update -g
-```
+And also you need [yarn](https://www.npmjs.com/package/yarn).
 
 Install the project dependencies in the project root:
 
@@ -60,14 +42,6 @@ yarn start
 ```
 
 ... to start in development mode
-
-or
-
-```
-node server
-```
-
-... to start the server only
 
 For production (prototype server) mode use:
 
@@ -91,9 +65,8 @@ PORT=3000 yarn prod
 This works a bit different on **Windows**. Use the following commands in prompt:
 
 ```
-set PORT=8000&& set PROXY=8001&& yarn start
-set PORT=3000&& node server
-set PORT=3001&& yarn prod
+set PORT=8000 && set PROXY=8001 && yarn start
+set PORT=3001 && yarn prod
 ```
 
 ## Configuring
@@ -420,7 +393,6 @@ Translations are stored in `project/locales/[lang]/translation.json`.
 Express Middleware configuration:
 
 * Fallback language: `default`
-* Language detection from request header
 * Language switch with query parameter: `?lang=de`
 
 ### Translation handlebars helper
@@ -461,9 +433,9 @@ To stay consistent you should favour the use of relative paths with a leading sl
 Link to resources relatively to the `project`-folder **with** a leading slash.
 
 ```html
-<link rel="stylesheet" href="/assets/app.css" type="text/css" />
+<link rel="stylesheet" href="/assets/ui.css" type="text/css" />
 <link rel="shortcut icon" href="/assets/img/icon/favicon.ico" type="image/x-icon" />
-<script src="/assets/app.js"></script>
+<script src="/assets/ui.js"></script>
 background: url(/assets/img/bg/texture.png) scroll 0 0 no-repeat;
 <a href="/content.html">Contentpage</a>
 ```
@@ -580,4 +552,4 @@ The following packages are installed by the [app](#name) generator as dependenci
 
 ### Credits
 
-This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 3.3.1).
+This app was generated with yeoman and the [generator-nitro](https://www.npmjs.com/package/generator-nitro) package (version 3.5.0).

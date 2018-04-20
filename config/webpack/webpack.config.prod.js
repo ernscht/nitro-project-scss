@@ -28,12 +28,6 @@ module.exports = {
 		filename: 'js/[name].min.js',
 		publicPath: '/assets/',
 	},
-	resolve: {
-		alias: {
-			Utils: path.resolve(__dirname, '../../src/share/utils/'),
-			Assets: path.resolve(__dirname, '../../src/assets/'),
-		},
-	},
 	module: {
 		rules: [
 			{

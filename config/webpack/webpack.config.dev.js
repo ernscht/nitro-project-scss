@@ -24,12 +24,6 @@ module.exports = {
 		filename: 'js/[name].js',
 		publicPath: '/assets/',
 	},
-	resolve: {
-		alias: {
-			Utils: path.resolve(__dirname, '../../src/share/utils/'),
-			Assets: path.resolve(__dirname, '../../src/assets/'),
-		},
-	},
 	module: {
 		rules: [
 			{
@@ -126,7 +120,6 @@ module.exports = {
 		// 	filename: 'css/[name].css',
 		// 	// chunkFilename: '[id].css',
 		// }),
-		new webpack.optimize.OccurrenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		// maybe more at the end...
 	],

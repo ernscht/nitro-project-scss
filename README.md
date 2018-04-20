@@ -4,10 +4,9 @@ Introduction …
 
 ## do / issues
 
-* disable webpack watching in production mode (`yarn prod`)
 * build contains too much code (e.g. "./molecules/example/css/modifier/example-blue.scss")
 * enable hot module reloading with `mini-css-extract-plugin`
-* test with many files
+* test with big project
 * check stylelint config (works unreliable & lintDirtyModulesOnly does not work as expected)
 * test error handling on file actions (delete/add src files/folder)
 * cleanup (_app, examples, ... )
@@ -16,6 +15,8 @@ Introduction …
 
 * how to handle eslint error concerning `module` not defined
 * outsource loading of assets and hot in entry files
+* check postcss loader & other loaders
+* check [devtool performance](https://webpack.js.org/configuration/devtool/)
 * better console output
 * cleanup config folder (maybe move gulp to config)
 * documentation

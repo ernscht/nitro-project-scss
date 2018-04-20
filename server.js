@@ -8,8 +8,12 @@ const hbs = require('./app/templating/hbs/engine');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 
+const isProduction = config.get('server.production');
+
 // webpack
-require('./app/core/webpack')(app);
+if (!isProduction) {
+	require('./app/core/webpack')(app);
+}
 
 // partials
 require('./app/templating/hbs/partials')(hbs);

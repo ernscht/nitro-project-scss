@@ -7,7 +7,7 @@ const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&t
 
 module.exports = {
 	mode: 'development',
-	devtool: 'source-map',
+	devtool: 'inline-source-map',
 	context: path.resolve(__dirname, '../../'),
 	entry : {
 		ui: [

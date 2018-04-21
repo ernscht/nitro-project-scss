@@ -14,7 +14,7 @@ const banner = `${bannerData.pkg.name}
 
 module.exports = {
 	mode: 'production',
-	watch: false,
+	devtool: 'source-map',
 	entry: {
 		ui: [
 			path.resolve(__dirname, '../../src/ui.js'),

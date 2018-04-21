@@ -8,7 +8,6 @@
 const extend = require('extend');
 const baseConfig = require('../app/core/config');
 const defaultConfig = {
-	assets: require('./default/assets'),
 	code: {
 		validation: {
 			eslint: {

@@ -5,7 +5,7 @@ Introduction …
 ## do / issues
 
 * build contains too much code (e.g. "./molecules/example/css/modifier/example-blue.scss")
-* enable hot module reloading with `mini-css-extract-plugin`
+* enable hot module reloading with `mini-css-extract-plugin` when ready
 * test with big project
 * check stylelint config (works unreliable & lintDirtyModulesOnly does not work as expected)
 * test error handling on file actions (delete/add src files/folder)

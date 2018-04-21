@@ -38,17 +38,14 @@
 
     "export": "yarn run build && gulp export",
 
-    "dev": "cross-env WEBPACK_CONFIG=../../config/webpack/webpack.config.dev.js gulp develop",
+    "dev": "gulp develop",
 
     "prod": "npm-run-all prod:*",
     "prod:build": "yarn build",
     "prod:serve": "cross-env NODE_ENV=production gulp serve",
 
     "start": "npm-run-all start:*",
-    "start:dev": "yarn dev",
-
-    "XXXbuild-dev": "webpack --mode development --config config/webpack/webpack.config.dev.js",
-    "XXXstart-dev": "cross-env WEBPACK_CONFIG=../../config/webpack/webpack.config.dev.js node server"
+    "start:dev": "yarn dev"
   },
   "keywords": [
     "frontend",
@@ -136,7 +133,7 @@
     "rimraf": "2.6.2",
 
     "webpack": "4.6.0",
-    "webpack-cli": "2.0.14",
+    "webpack-cli": "2.0.15",
     "webpack-dev-middleware": "3.1.2",
     "webpack-hot-middleware": "2.22.1",
 

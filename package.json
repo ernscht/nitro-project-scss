@@ -16,7 +16,7 @@
     "githooks": "gulp sync-githooks",
     "lint": "npm-run-all lint:*",
     "lint:accessibility": "gulp lint-accessibility",
-    "lint:css": "stylelint src/patterns/**/*.*ss",
+    "lint:css": "stylelint src/patterns/**/*.*ss src/share/**/*.*ss",
     "lint:data": "node app/scripts/validate-pattern-data.js",
     "lint:html": "gulp lint-html",
     "lint:js": "eslint ./src/patterns ./src/share ./src/*.js",
@@ -151,10 +151,7 @@
     "optimize-css-assets-webpack-plugin": "4.0.0",
 
     "babel-loader": "7.1.4",
-    "handlebars-loader": "1.7.0",
-    "babel-preset-react": "6.24.1",
-    "react": "16.3.2",
-    "react-dom": "16.3.2"
+    "handlebars-loader": "1.7.0"
   },
   "browserslist": [
     "> 0.5%",

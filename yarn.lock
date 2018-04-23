@@ -10210,6 +10210,10 @@ pretty-hrtime@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
 
+prevent-window-opener-attacks@0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/prevent-window-opener-attacks/-/prevent-window-opener-attacks-0.2.4.tgz#105a46b8fdbb349a9e6cbe6cd75d9096e453c0a4"
+
 private@^0.1.6, private@^0.1.7, private@~0.1.5:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"

@@ -60,6 +60,7 @@
     "handlebars": "4.0.11",
     "jquery": "3.3.1",
     "lodash": "4.17.5",
+    "prevent-window-opener-attacks": "0.2.4",
     "terrific": "3.0.0"
   },
   "devDependencies": {

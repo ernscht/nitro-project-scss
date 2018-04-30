@@ -1,8 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // const pkg = require('../../package.json');
 const bannerData = {
 	date: new Date().toISOString().slice(0, 19),
@@ -15,13 +15,10 @@ const banner = `${bannerData.pkg.name}
 module.exports = {
 	mode: 'production',
 	devtool: 'source-map',
+	context: path.resolve(__dirname, '../../'),
 	entry: {
-		ui: [
-			path.resolve(__dirname, '../../src/ui.js'),
-		],
-		proto: [
-			path.resolve(__dirname, '../../src/proto.js'),
-		],
+		ui: './src/ui.js',
+		proto: './src/proto.js',
 	},
 	output: {
 		path: path.resolve(__dirname, '../../public/assets'),
@@ -38,7 +35,7 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							importLoaders: 2,
-							sourceMap: false,
+							sourceMap: true,
 						}
 					},
 					{
@@ -47,13 +44,19 @@ module.exports = {
 							plugins: () => [
 								require('autoprefixer'),
 							],
-							sourceMap: false,
+							sourceMap: true,
 						}
 					},
+					// {
+					// 	loader: 'resolve-url-loader',
+					// 	options: {
+					// 		sourceMap: true,
+					// 	},
+					// },
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: false,
+							sourceMap: true,
 						},
 					},
 				],
@@ -83,14 +86,14 @@ module.exports = {
 		],
 	},
 	optimization: {
-		minimizer: [
-			new UglifyJsPlugin({
-				cache: true,
-				parallel: true,
-				sourceMap: true // set to true if you want JS source maps
-			}),
-			new OptimizeCSSAssetsPlugin({})
-		],
+		// minimizer: [
+		// 	new UglifyJsPlugin({
+		// 		cache: true,
+		// 		parallel: true,
+		// 		sourceMap: true // set to true if you want JS source maps
+		// 	}),
+		// 	new OptimizeCSSAssetsPlugin({}),
+		// ],
 		splitChunks: {
 			cacheGroups: {
 				vendor: {
@@ -122,6 +125,11 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: 'css/[name].min.css',
 			chunkFilename: '[id].css',
+		}),
+		new OptimizeCSSAssetsPlugin({
+			// cssProcessorOptions: {
+			// 	sourceMap: true,
+			// },
 		}),
 	],
 };

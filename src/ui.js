@@ -1,13 +1,11 @@
-'use strict';
+/* global module */
 
 import * as T from 'terrific';
 import $ from 'jquery';
 
-/* eslint-disable no-undef */
 if (module.hot) {
 	module.hot.accept();
 }
-/* eslint-enable no-undef */
 
 function requireAll(requireContext) {
 	return requireContext.keys().map(requireContext);

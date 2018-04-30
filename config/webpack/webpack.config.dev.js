@@ -11,11 +11,11 @@ module.exports = {
 	context: path.resolve(__dirname, '../../'),
 	entry : {
 		ui: [
-			path.resolve(__dirname, '../../src/ui.js'),
+			'./src/ui.js',
 			hotMiddlewareScript,
 		],
 		proto: [
-			path.resolve(__dirname, '../../src/proto.js'),
+			'./src/proto.js',
 			hotMiddlewareScript,
 		],
 	},
@@ -40,6 +40,15 @@ module.exports = {
 						options: {
 							sourceMap: true,
 							importLoaders: 1,
+						}
+					},
+					{
+						loader: 'postcss-loader',
+						options: {
+							plugins: () => [
+								require('autoprefixer'),
+							],
+							sourceMap: true,
 						}
 					},
 					{

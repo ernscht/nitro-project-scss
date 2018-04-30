@@ -4,7 +4,7 @@ Introduction …
 
 ## do / issues
 
-* build contains too much code (e.g. "./molecules/example/css/modifier/example-blue.scss")
+* build contains too much code (e.g. "./molecules/example/css/modifier/example-blue.scss") -> alternative import loader
 * enable hot module reloading with `mini-css-extract-plugin` when ready
 * test with big project
 * check stylelint config (works unreliable & lintDirtyModulesOnly does not work as expected)
@@ -15,7 +15,7 @@ Introduction …
 
 * how to handle eslint error concerning `module` not defined
 * outsource loading of assets and hot in entry files
-* check postcss loader & other loaders
+* lerna compatibility of babel-loader with excludes
 * check [devtool performance](https://webpack.js.org/configuration/devtool/)
 * better console output
 * cleanup config folder (maybe move gulp to config)
@@ -25,7 +25,8 @@ Introduction …
 
 * eslint should lint only changed files
 * use "gondel"
-* rename `app` to `server`
+* rename `app` to `server` or move to package
+* split into subparts (lerna packages)
 
 ## Nitro
 

@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
+/* global module */
+
 if (module.hot) {
 	module.hot.accept();
 }
-/* eslint-enable no-undef */
 
 function requireAll(requireContext) {
 	return requireContext.keys().map(requireContext);

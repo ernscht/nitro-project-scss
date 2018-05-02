@@ -1,2 +1,2 @@
 node_modules/
-src/assets/css/**/reset.css
+src/shared/base/reset/css/yui/reset.css

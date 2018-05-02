@@ -73,7 +73,7 @@
     "babel-preset-env": "1.6.1",
     "backstopjs": "3.2.15",
     "body-parser": "1.18.2",
-    "browser-sync": "2.24.1",
+    "browser-sync": "2.24.2",
     "chalk": "2.4.1",
     "compression": "1.7.2",
     "config": "1.30.0",

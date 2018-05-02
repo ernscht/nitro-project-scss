@@ -165,8 +165,6 @@ module.exports = {
 	// stats: 'minimal',
 };
 
-console.log('cwd: '+process.cwd());
-
 if (config.get('code.validation.stylelint.live')) {
 	module.exports.plugins.push(
 		new StyleLintPlugin({
@@ -178,8 +176,6 @@ if (config.get('code.validation.stylelint.live')) {
 			quiet: false,
 			failOnError: false,
 			emitErrors: true,
-
-			// files: ['(src/assets/**/*.*ss|src/patterns/**/*.*ss)'],
 		})
 	);
 }

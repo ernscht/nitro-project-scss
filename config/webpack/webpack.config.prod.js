@@ -82,7 +82,27 @@ module.exports = {
 						// partialDirs: ''
 					}
 				}
-			}
+			},
+			/**
+			 * File loader for supporting images, for example, in CSS files.
+			 */
+			{
+				test: /\.(jpg|png|gif)$/,
+				loader: 'file-loader',
+				options: {
+					name: 'images/[hash].[ext]',
+				},
+			},
+			/**
+			 *File loader for supporting fonts, for example, in CSS files.
+			 */
+			{
+				test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+				loader: 'file-loader',
+				options: {
+					name: 'fonts/[name].[ext]',
+				},
+			},
 		],
 	},
 	optimization: {

@@ -14,7 +14,7 @@ function requireAll(requireContext) {
 /* eslint-disable no-useless-escape */
 
 // js files
-requireAll(require.context('./share', true,
+requireAll(require.context('./shared', true,
 	/(?:base)[\/\\]([^\/\\]+)[\/\\]js[\/\\]\1\.js$/
 ));
 requireAll(require.context('./patterns', true,
@@ -25,7 +25,7 @@ requireAll(require.context('./patterns', true,
 ));
 
 // css files
-requireAll(require.context('./share', true,
+requireAll(require.context('./shared', true,
 	/(?:base)[\/\\]([^\/\\]+)[\/\\]css[\/\\]\1\.s?css$/
 ));
 requireAll(require.context('./patterns', true,

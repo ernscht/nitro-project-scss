@@ -7,4 +7,16 @@
 	{{/pattern}}
 	{{pattern name='box' modifier='dark'}}
 	{{pattern name='cta'}}
+	<style>
+		.box {
+			outline: 0.5vw solid lightcoral;
+			width: 50vw;
+			margin: 0 auto;
+			position: relative;
+		}
+		.box--200 { height: 200px; }
+	</style>
+	<div class="box box--200">{{pattern name='loader'}}</div>
+	<div style="height: 1000px;"></div>
+	<div class="box">{{pattern name='image'}}</div>
 </div>

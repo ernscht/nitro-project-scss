@@ -44,6 +44,13 @@ const defaultConfig = {
 		port: 8080,
 		proxy: 8081,
 	},
+	feature: {
+		i18next: {
+			middlewareOptions: {
+				ignoreRoutes: ['api/', 'assets/', 'dist/', 'content/'],
+			}
+		}
+	},
 	exporter: require('./default/exporter'),
 };
 

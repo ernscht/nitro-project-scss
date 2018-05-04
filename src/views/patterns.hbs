@@ -1,8 +1,8 @@
 <div class="container">
-	<h1>{{pattern name='icon' icon='nitro'}}&nbsp;Nitro example pattern</h1>
+	{{pattern name='heading' tag='h1'}}
 	{{pattern name='example'}}
-
 	{{#pattern name='box'}}
+		<h3>{{pattern name='icon' icon='nitro'}}&nbsp;Nitro example patterns</h3>
 		{{pattern name='button'}}
 	{{/pattern}}
 	{{pattern name='box' modifier='dark'}}
@@ -14,9 +14,10 @@
 			margin: 0 auto;
 			position: relative;
 		}
-		.box--200 { height: 200px; }
 	</style>
-	<div class="box box--200">{{pattern name='loader'}}</div>
-	<div style="height: 1000px;"></div>
+	{{#pattern name='box'}}
+		{{pattern name='loader'}}
+	{{/pattern}}
+
 	<div class="box">{{pattern name='image'}}</div>
 </div>

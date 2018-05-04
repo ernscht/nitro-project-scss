@@ -4,13 +4,14 @@ Introduction …
 
 ## do / issues
 
-* enable hot module reloading with `mini-css-extract-plugin` when ready
+* image minification
 * test with big project
 * check stylelint config (works unreliable & lintDirtyModulesOnly does not work as expected)
 * cleanup (_app, examples, ... )
 
 ### prio 2
 
+* enable hot module reloading with `mini-css-extract-plugin` when ready
 * how to handle eslint error concerning `module` not defined
 * outsource loading of assets and hot in entry files
 * lerna compatibility of babel-loader with excludes
@@ -20,7 +21,6 @@ Introduction …
 
 ### prio 3
 
-* better console output
 * eslint should lint only changed files
 * use "gondel"
 * rename `app` to `server` or move to package

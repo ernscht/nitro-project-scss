@@ -105,6 +105,17 @@ module.exports = {
 				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
+					options: {
+						babelrc: false,
+						presets: [
+							[
+								'@babel/preset-env',
+								{
+									useBuiltIns: 'entry',
+								},
+							],
+						],
+					},
 				},
 			},
 			{
@@ -122,17 +133,14 @@ module.exports = {
 					}
 				}
 			},
-			/**
-			 * File loader for supporting images, for example, in CSS files.
-			 */
+			// File loader for supporting fonts, for example, in CSS files.
 			{
-				test: /\.(jpg|png|gif)$/,
+				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
 				use: 'file-loader'
 			},
-			/* File loader for supporting fonts, for example, in CSS files.
-			*/
+			// File loader for supporting images, for example, in CSS files.
 			{
-				test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+				test: /\.(png|jpg|gif|svg)$/,
 				use: 'file-loader'
 			},
 		],

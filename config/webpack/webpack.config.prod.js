@@ -66,8 +66,19 @@ module.exports = {
 				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
+					options: {
+						presets: [
+							[
+								'@babel/preset-env',
+								{
+									useBuiltIns: 'entry',
+								},
+							],
+						],
+					},
 				},
 			},
+			// handlebar precompiled templates
 			{
 				test: /\.hbs$/,
 				exclude: /node_modules/,
@@ -83,24 +94,20 @@ module.exports = {
 					}
 				}
 			},
-			/**
-			 * File loader for supporting images, for example, in CSS files.
-			 */
+			// File loader for supporting fonts, for example, in CSS files.
 			{
-				test: /\.(jpg|png|gif)$/,
-				loader: 'file-loader',
-				options: {
-					name: 'images/[hash].[ext]',
-				},
-			},
-			/**
-			 *File loader for supporting fonts, for example, in CSS files.
-			 */
-			{
-				test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
 				loader: 'file-loader',
 				options: {
 					name: 'fonts/[name].[ext]',
+				},
+			},
+			// File loader for supporting images, for example, in CSS files.
+			{
+				test: /\.(png|jpg|gif|svg)$/,
+				loader: 'file-loader',
+				options: {
+					name: 'media/[hash].[ext]',
 				},
 			},
 		],

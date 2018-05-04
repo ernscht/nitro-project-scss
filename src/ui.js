@@ -17,6 +17,7 @@ import './patterns/atoms/heading';
 import './patterns/atoms/icon';
 import './patterns/atoms/image';
 import './patterns/atoms/loader';
+import './patterns/atoms/stage';
 import './patterns/molecules/example';
 
 if (module.hot) {

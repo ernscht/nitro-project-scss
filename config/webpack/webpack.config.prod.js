@@ -102,11 +102,13 @@ module.exports = {
 					name: 'fonts/[name].[ext]',
 				},
 			},
-			// File loader for supporting images, for example, in CSS files.
+			// url loader for images (for example, in CSS files)
+			// inlines assets below a limit
 			{
 				test: /\.(png|jpg|gif|svg)$/,
-				loader: 'file-loader',
+				loader: 'url-loader',
 				options: {
+					limit: 3500,
 					name: 'media/[hash].[ext]',
 				},
 			},

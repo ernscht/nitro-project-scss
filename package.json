@@ -94,7 +94,6 @@
     "gulp-declare": "0.3.0",
     "gulp-header": "2.0.5",
     "gulp-htmllint": "0.0.15",
-    "gulp-imagemin": "4.1.0",
     "gulp-live-server": "0.0.31",
     "gulp-load-plugins": "1.5.0",
     "gulp-newer": "1.4.0",
@@ -113,7 +112,7 @@
     "i18next-express-middleware": "1.1.1",
     "i18next-node-fs-backend": "1.0.0",
     "i18next-sprintf-postprocessor": "0.2.2",
-    "imagemin-pngquant": "5.1.0",
+
     "jasmine-core": "3.1.0",
     "karma": "2.0.2",
     "karma-babel-preprocessor": "7.0.0",
@@ -139,12 +138,11 @@
     "webpack-hot-middleware": "2.22.1",
 
     "mini-css-extract-plugin": "0.4.0",
-    "resolve-url-loader": "2.3.0",
     "sass-loader": "7.0.1",
     "node-sass": "4.9.0",
     "style-loader": "0.21.0",
     "css-loader": "0.28.11",
-    "postcss-loader": "2.1.4",
+    "postcss-loader": "2.1.5",
     "stylelint-webpack-plugin": "0.10.4",
 
     "eslint-friendly-formatter": "4.0.1",
@@ -156,8 +154,17 @@
     "@babel/preset-env": "7.0.0-beta.46",
     "babel-loader": "8.0.0-beta.2",
     "handlebars-loader": "1.7.0",
+
     "file-loader": "1.1.11",
-    "url-loader": "1.0.1"
+    "url-loader": "1.0.1",
+    "img-loader": "3.0.0",
+    "imagemin": "5.3.1",
+    "imagemin-gifsicle": "5.2.0",
+    "imagemin-jpegtran": "5.0.2",
+    "imagemin-optipng": "5.2.1",
+    "imagemin-svgo": "6.0.0",
+    "imagemin-pngquant": "5.1.0"
+
   },
   "browserslist": [
     "> 0.5%",

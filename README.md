@@ -4,7 +4,7 @@ Introduction …
 
 ## do / issues
 
-* image minification
+* image minification [img-loader](https://www.npmjs.com/package/img-loader) or [image-webpack-loader](https://www.npmjs.com/package/image-webpack-loader)
 * test with big project
 * check stylelint config (works unreliable & lintDirtyModulesOnly does not work as expected)
 * cleanup (_app, examples, ... )

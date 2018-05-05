@@ -27,6 +27,7 @@ module.exports = {
 	},
 	module: {
 		rules: [
+			// styles
 			{
 				test: /\.s?css$/,
 				use: [
@@ -47,12 +48,6 @@ module.exports = {
 							sourceMap: true,
 						}
 					},
-					// {
-					// 	loader: 'resolve-url-loader',
-					// 	options: {
-					// 		sourceMap: true,
-					// 	},
-					// },
 					{
 						loader: 'sass-loader',
 						options: {
@@ -61,6 +56,7 @@ module.exports = {
 					},
 				],
 			},
+			// js
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
@@ -78,7 +74,7 @@ module.exports = {
 					},
 				},
 			},
-			// handlebar precompiled templates
+			// handlebars precompiled templates
 			{
 				test: /\.hbs$/,
 				exclude: /node_modules/,
@@ -94,7 +90,7 @@ module.exports = {
 					}
 				}
 			},
-			// File loader for supporting fonts, for example, in CSS files.
+			// woff fonts (for example, in CSS files)
 			{
 				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
 				loader: 'file-loader',
@@ -102,14 +98,47 @@ module.exports = {
 					name: 'fonts/[name].[ext]',
 				},
 			},
+			// image loader & minification
+			{
+				test: /\.(png|jpg|gif|svg)$/,
+				loader: 'img-loader',
+				// Specify enforce: 'pre' to apply the loader
+				// before url-loader
+				enforce: 'pre',
+				options: {
+					plugins: [
+						require('imagemin-gifsicle')({
+							interlaced: false
+						}),
+						require('imagemin-jpegtran')({
+							progressive: true
+						}),
+						require('imagemin-optipng')({
+							optimizationLevel: 7
+						}),
+						require('imagemin-pngquant')({
+							// floyd: 0.5,
+							// speed: 2
+						}),
+						require('imagemin-svgo')({
+							plugins: [
+								{ collapseGroups: false },
+								{ cleanupIDs: false },
+								{ removeUnknownsAndDefaults: false },
+								{ removeViewBox: false }
+							]
+						})
+					]
+				}
+			},
 			// url loader for images (for example, in CSS files)
 			// inlines assets below a limit
 			{
 				test: /\.(png|jpg|gif|svg)$/,
 				loader: 'url-loader',
 				options: {
-					limit: 3500,
-					name: 'media/[hash].[ext]',
+					limit: 3 * 1028,
+					name: 'media/[ext]/[name].[ext]',
 				},
 			},
 		],

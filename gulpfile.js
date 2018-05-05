@@ -6,10 +6,8 @@ const gulpSequence = require('gulp-sequence').use(gulp);
 const config = require('config');
 require('nitro-exporter')(gulp, config);
 
-gulp.task('sync-githooks', getTask('sync-githooks'));
-gulp.task('minify-img', getTask('minify-img'));
 gulp.task('svg-sprite', getTask('svg-sprite'));
-gulp.task('assets', ['svg-sprite', 'minify-img']);
+gulp.task('assets', ['svg-sprite']);
 gulp.task('watch-assets', ['assets'], getTask('watch-assets'));
 gulp.task('serve', getTask('serve'));
 gulp.task('watch-serve', ['serve'], getTask('watch-serve'));

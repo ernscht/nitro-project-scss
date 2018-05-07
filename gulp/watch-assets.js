@@ -40,21 +40,9 @@ module.exports = (gulp, plugins) => {
 		});
 
 		plugins.watch([
-			'src/assets/img/**/*',
-		], () => {
-			gulp.start('minify-img');
-		});
-
-		plugins.watch([
 			'src/patterns/atoms/icon/img/icons/*.svg',
 		], () => {
 			gulp.start('svg-sprite');
-		});
-
-		plugins.watch([
-			'src/assets/font/**/*',
-		], () => {
-			gulp.start('copy-assets');
 		});
 	};
 };

@@ -2,7 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 // const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // const pkg = require('../../package.json');
 const bannerData = {
 	date: new Date().toISOString().slice(0, 19),
@@ -95,7 +96,7 @@ module.exports = {
 				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
 				loader: 'file-loader',
 				options: {
-					name: 'fonts/[name].[ext]',
+					name: 'fonts/[name].[ext]?[hash]',
 				},
 			},
 			// image loader & minification
@@ -138,7 +139,7 @@ module.exports = {
 				loader: 'url-loader',
 				options: {
 					limit: 3 * 1028,
-					name: 'media/[ext]/[name].[ext]',
+					name: 'media/[ext]/[name].[ext]?[hash]',
 				},
 			},
 		],
@@ -189,5 +190,6 @@ module.exports = {
 			// 	sourceMap: true,
 			// },
 		}),
+		// new BundleAnalyzerPlugin(),
 	],
 };

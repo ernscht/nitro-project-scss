@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const config = require('config');
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
 	mode: 'development',
@@ -140,7 +141,7 @@ module.exports = {
 			},
 			// File loader for supporting images, for example, in CSS files.
 			{
-				test: /\.(png|jpg|gif|svg)$/,
+				test: /\.(png|jpg|gif|svg|ico)$/,
 				use: 'file-loader'
 			},
 		],
@@ -151,6 +152,7 @@ module.exports = {
 		// 	// chunkFilename: '[id].css',
 		// }),
 		new webpack.HotModuleReplacementPlugin(),
+		// new BundleAnalyzerPlugin(),
 		// maybe more at the end...
 	],
 	optimization: {

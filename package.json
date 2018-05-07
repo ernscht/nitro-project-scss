@@ -13,7 +13,6 @@
     "create-pattern": "yo nitro:pattern",
     "nitro:pattern": "yarn create-pattern",
     "nitro:update": "yarn add generator-nitro --exact && yo nitro",
-    "githooks": "gulp sync-githooks",
     "lint": "npm-run-all lint:*",
     "lint:accessibility": "gulp lint-accessibility",
     "lint:css": "stylelint src/patterns/**/*.*ss src/share/**/*.*ss",
@@ -21,7 +20,7 @@
     "lint:html": "gulp lint-html",
     "lint:js": "eslint ./src/patterns ./src/share ./src/*.js",
     "lint:license": "license-checker --production --summary --exclude \"Apache-2.0, BSD, ISC, LGPL, MIT, MPL\" --failOn \"AGPL; EPL; GPL\"",
-    "postinstall": "npm rebuild node-sass && yarn githooks",
+    "postinstall": "npm rebuild node-sass",
     "prepublish": "nsp check --output summary",
     "visual-approve": "gulp visual-approve",
     "visual-reference": "gulp visual-reference",
@@ -33,8 +32,8 @@
 
     "build": "npm-run-all build:*",
     "build:clean": "rimraf public/assets",
-    "build:assets": "gulp assets",
-    "build:webpack": "webpack --mode production --config config/webpack/webpack.config.prod.js",
+    "XXXbuild:assets": "gulp assets",
+    "build:webpack": "webpack --mode production --config config/webpack/webpack.config.prod.js --profile --json > stats.json",
 
     "export": "yarn run build && gulp export",
 
@@ -136,6 +135,7 @@
     "webpack-cli": "2.1.2",
     "webpack-dev-middleware": "3.1.3",
     "webpack-hot-middleware": "2.22.1",
+    "webpack-bundle-analyzer": "2.11.1",
 
     "mini-css-extract-plugin": "0.4.0",
     "sass-loader": "7.0.1",

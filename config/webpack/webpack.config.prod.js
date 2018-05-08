@@ -43,9 +43,14 @@ module.exports = {
 					{
 						loader: 'postcss-loader',
 						options: {
-							plugins: () => [
-								require('autoprefixer'),
-							],
+							plugins: (loader) => {
+								return [
+									require('iconfont-webpack-plugin')({
+										resolve: loader.resolve,
+									}),
+									require('autoprefixer'),
+								];
+							},
 							sourceMap: true,
 						}
 					},

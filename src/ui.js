@@ -12,6 +12,7 @@ import './shared/base/webfonts/css/webfont-playfair-display.scss';
 
 import './patterns/atoms/box';
 import './patterns/atoms/button';
+import './patterns/atoms/checkbox';
 import './patterns/atoms/cta';
 import './patterns/atoms/heading';
 import './patterns/atoms/icon';

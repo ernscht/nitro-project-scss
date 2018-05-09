@@ -4,7 +4,7 @@ const gulp = require('gulp');
 const getTask = require('./config/gulp/utils').getTask;
 const gulpSequence = require('gulp-sequence').use(gulp);
 // const config = require('config');
-// equire('nitro-exporter')(gulp, config);
+// require('nitro-exporter')(gulp, config);
 
 gulp.task('minify-img', getTask('minify-img'));
 gulp.task('svg-sprite', getTask('svg-sprite'));
@@ -20,5 +20,3 @@ gulp.task('lint-html', ['dump-views'], getTask('lint-html'));
 gulp.task('visual-approve', getTask('visual-approve'));
 gulp.task('visual-reference', ['assets'], getTask('visual-reference'));
 gulp.task('visual-test', ['assets'], getTask('visual-test'));
-gulp.task('test', ['assets'], getTask('test'));
-gulp.task('watch-test', ['test'], getTask('watch-test'));

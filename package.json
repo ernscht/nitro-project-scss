@@ -27,7 +27,7 @@
     "visual-test": "gulp visual-test",
     "test": "npm-run-all test:*",
     "test:lint": "yarn lint",
-    "XXXtest:karma": "gulp test",
+    "test:karma": "karma start ./tests/karma/karma.conf.js",
     "XXXprebuild": "yarn test",
 
     "build": "npm-run-all build:*",
@@ -114,7 +114,7 @@
     "i18next-sprintf-postprocessor": "0.2.2",
     "jasmine-core": "3.1.0",
     "karma": "2.0.2",
-    "karma-babel-preprocessor": "7.0.0",
+    "karma-babel-preprocessor": "8.0.0-beta.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-jasmine": "1.1.2",
     "karma-phantomjs-launcher": "1.0.4",

@@ -17,7 +17,7 @@ module.exports = function (config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			'public/assets/js/app.js',
+			'public/assets/js/ui.min.js',
 			'src/patterns/**/test/*.test.js',
 		],
 
@@ -31,7 +31,7 @@ module.exports = function (config) {
 		},
 		babelPreprocessor: {
 			options: {
-				presets: ['env'],
+				presets: ['@babel/preset-env'],
 				sourceMap: 'inline',
 			},
 		},

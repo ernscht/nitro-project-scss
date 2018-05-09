@@ -2,63 +2,58 @@
 @import "../../../../shared/utils/hidden/css/hidden.scss";
 
 $checkbox-border: 2px;
-$checkbox-size : 18px + (2 * $checkbox-border);
-$checkbox-pos-v: -4px;
+$checkbox-size : 1.3em;
 $checkbox-color: $color-gray-5;
 
 .a-checkbox {
 	color: inherit;
-
-	white-space: nowrap;
 	position: relative;
-	padding-top: (-1) * $checkbox-pos-v; // compensate pos-v shift of button to align text to button
 
-	// Checkbox Replacement: Hide default
 	input[type="checkbox"] {
+		// Checkbox Replacement: Hide default
 		@include input-visually-hidden();
-	}
 
-	// Checkbox Replacement: Box
-	input[type="checkbox"] + label::before {
-		content: '';
-		width: $checkbox-size;
-		height: $checkbox-size;
-		position: absolute;
-		top: 0;
-		left: 0;
+		// Checkbox Replacement: Box
+		+ label::before {
+			content: '';
+			position: absolute;
+			top: -1px;
+			left: 0;
+			display: block;
+			width: $checkbox-size;
+			height: $checkbox-size;
 
-		border: $checkbox-border solid $checkbox-color;
-		border-radius: 4px;
-	};
+			border: $checkbox-border solid $checkbox-color;
+			border-radius: 4px;
+		};
 
-	// Checkbox Replacement - checked state: Check-Icon
-	input[type="checkbox"]:checked + label::after {
-		font-icon: url('../img/check.svg');
-		color: $color-gray-4;
-		position: absolute;
-		top: 7px;
-		left: 6px;
-	};
+		// Checkbox Replacement - checked state: Check-Icon
+		&:checked + label::after {
+			font-icon: url('../img/check.svg');
+			color: $color-gray-4;
+			position: absolute;
+			top: 6px;
+			left: 5px;
+		};
 
-	label {
-		display: block;
-		width: 100%;
-		min-height: $checkbox-size;
-		margin-bottom: 0;
-		padding-left: $checkbox-size + 12px;
+		label {
+			display: inline-block;
+			padding: 0.2em 1em 0.2em (1 + $checkbox-size) ;
 
-		cursor: pointer;
-		user-select: none;
+			cursor: pointer;
+			user-select: none;
 
-		color: inherit;
-		font-family: inherit;
-		font-weight: inherit;
-		font-size: inherit;
-		line-height: inherit;
-		text-transform: none;
-		white-space: normal;
+			color: inherit;
+			font-family: inherit;
+			font-weight: inherit;
+			font-size: inherit;
+			line-height: inherit;
+			text-transform: none;
+		}
 	}
 }
+
+
 
 // states
 .state-a-checkbox--disabled {

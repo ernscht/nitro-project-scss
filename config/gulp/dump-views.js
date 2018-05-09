@@ -17,7 +17,7 @@
 
 const argv = require('yargs').argv;
 const config = require('config');
-const view = require('../app/lib/view');
+const view = require('../../app/lib/view');
 const del = require('del');
 const getPort = require('get-port');
 const utils = require('./utils');

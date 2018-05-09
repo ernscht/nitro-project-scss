@@ -11,16 +11,14 @@ Introduction …
 
 ### prio 2
 
-* enable hot module reloading with `mini-css-extract-plugin` when ready
+* sourcemaps for production?
 * how to handle eslint error concerning `module` not defined
-* outsource loading of assets and hot in entry files
 * lerna compatibility of babel-loader with excludes
-* check [devtool performance](https://webpack.js.org/configuration/devtool/)
-* cleanup config folder (maybe move gulp to config)
 * documentation
 
 ### prio 3
 
+* enable hot module reloading with `mini-css-extract-plugin` when ready
 * eslint should lint only changed files
 * use "gondel"
 * rename `app` to `server` or move to package

@@ -39,6 +39,10 @@ module.exports = (gulp, plugins) => {
 			});
 		});
 
+		plugins.watch(['src/shared/assets/img/**/*'], () => {
+			gulp.start('minify-img');
+		});
+
 		plugins.watch([
 			'src/patterns/atoms/icon/img/icons/*.svg',
 		], () => {

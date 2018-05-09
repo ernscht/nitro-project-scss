@@ -32,7 +32,7 @@
 
     "build": "npm-run-all build:*",
     "build:clean": "rimraf public/assets",
-    "XXXbuild:assets": "gulp assets",
+    "build:assets": "gulp assets",
     "build:webpack": "webpack --mode production --config config/webpack/webpack.config.prod.js",
 
     "export": "yarn run build && gulp export",
@@ -67,7 +67,7 @@
   "devDependencies": {
     "@namics/eslint-config": "5.0.1",
     "@namics/stylelint-bem": "5.1.0",
-    "ajv": "6.4.0",
+    "ajv": "6.5.0",
     "autoprefixer": "8.4.1",
     "backstopjs": "3.2.15",
     "body-parser": "1.18.2",
@@ -92,6 +92,7 @@
     "gulp-change": "1.0.0",
     "gulp-declare": "0.3.0",
     "gulp-header": "2.0.5",
+    "gulp-imagemin": "4.1.0",
     "gulp-htmllint": "0.0.15",
     "gulp-live-server": "0.0.31",
     "gulp-load-plugins": "1.5.0",
@@ -111,7 +112,6 @@
     "i18next-express-middleware": "1.1.1",
     "i18next-node-fs-backend": "1.0.0",
     "i18next-sprintf-postprocessor": "0.2.2",
-
     "jasmine-core": "3.1.0",
     "karma": "2.0.2",
     "karma-babel-preprocessor": "7.0.0",
@@ -144,7 +144,7 @@
     "css-loader": "0.28.11",
     "postcss-loader": "2.1.5",
     "stylelint-webpack-plugin": "0.10.4",
-    "iconfont-webpack-plugin": "1.2.0",
+    "iconfont-webpack-plugin": "2.0.0",
 
     "eslint-friendly-formatter": "4.0.1",
     "eslint-loader": "2.0.0",

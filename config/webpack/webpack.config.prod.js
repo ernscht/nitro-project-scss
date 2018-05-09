@@ -36,7 +36,6 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
-							importLoaders: 2,
 							sourceMap: true,
 						}
 					},
@@ -144,7 +143,7 @@ module.exports = {
 				loader: 'url-loader',
 				options: {
 					limit: 3 * 1028,
-					name: 'media/[ext]/[name].[ext]?[hash]',
+					name: 'media/[ext]/[name]-[hash].[ext]',
 				},
 			},
 		],

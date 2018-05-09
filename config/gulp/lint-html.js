@@ -1,7 +1,7 @@
 'use strict';
 
 const utils = require('./utils');
-const lint = require('../app/lib/lint');
+const lint = require('../../app/lib/lint');
 const srcPattern = `${utils.getTmpDirectory('views')}/*.html`;
 
 module.exports = (gulp, plugins) => {

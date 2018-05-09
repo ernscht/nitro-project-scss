@@ -1,9 +1,8 @@
 'use strict';
 
-const path = require('path');
 const fs = require('fs');
 const extend = require('extend');
-const basePath = path.normalize(path.join(__dirname, '../../'));
+const basePath = `${fs.realpathSync(process.cwd())}/`;
 
 const defaultConfig = {
 	// assets: {},

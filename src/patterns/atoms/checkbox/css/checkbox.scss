@@ -35,21 +35,21 @@ $checkbox-color: $color-gray-5;
 			top: 6px;
 			left: 5px;
 		};
+	}
 
-		label {
-			display: inline-block;
-			padding: 0.2em 1em 0.2em (1 + $checkbox-size) ;
+	label {
+		display: inline-block;
+		padding: 0.2em 1em 0.2em (1 + $checkbox-size) ;
 
-			cursor: pointer;
-			user-select: none;
+		cursor: pointer;
+		user-select: none;
 
-			color: inherit;
-			font-family: inherit;
-			font-weight: inherit;
-			font-size: inherit;
-			line-height: inherit;
-			text-transform: none;
-		}
+		color: inherit;
+		font-family: inherit;
+		font-weight: inherit;
+		font-size: inherit;
+		line-height: inherit;
+		text-transform: none;
 	}
 }
 

@@ -3,7 +3,9 @@
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
+const config = require('config');
 const webpackConfig = require(process.env.WEBPACK_CONFIG ? process.env.WEBPACK_CONFIG : '../../config/webpack/webpack.config.dev');
+webpackConfig.mode = config.get('server.production') ? 'production' : 'development';
 const webpackCompiler = webpack(webpackConfig);
 const wpm = webpackMiddleware(webpackCompiler, {
 	logLevel: 'warn',

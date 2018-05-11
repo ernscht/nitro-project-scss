@@ -7,7 +7,6 @@ const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&t
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
-	mode: 'development',
 	devtool: 'inline-source-map',
 	context: path.resolve(__dirname, '../../'),
 	entry : {
@@ -27,6 +26,7 @@ module.exports = {
 	},
 	module: {
 		rules: [
+			// styles
 			{
 				test: /\.?scss$/,
 				use: [
@@ -40,7 +40,7 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							sourceMap: true,
-							importLoaders: 1,
+							importLoaders: 2,
 						}
 					},
 					{
@@ -70,6 +70,7 @@ module.exports = {
 					},
 				]
 			},
+			// styles (MiniCSSExtract Plugin)
 			// {
 			// 	test: /\.s?css$/,
 			// 	use: [
@@ -98,19 +99,7 @@ module.exports = {
 			// 		},
 			// 	],
 			// },
-			{
-				_disabled: !config.get('code.validation.eslint.live'),
-				enforce: 'pre',
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: 'eslint-loader',
-					options: {
-						cache: true,
-						// formatter: require('eslint-friendly-formatter'),
-					},
-				},
-			},
+			// js
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
@@ -129,6 +118,7 @@ module.exports = {
 					},
 				},
 			},
+			// handlebars precompiled templates
 			{
 				test: /\.hbs$/,
 				exclude: /node_modules/,
@@ -144,12 +134,12 @@ module.exports = {
 					}
 				}
 			},
-			// File loader for supporting fonts, for example, in CSS files.
+			// woff fonts (for example, in CSS files)
 			{
 				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
 				use: 'file-loader'
 			},
-			// File loader for supporting images, for example, in CSS files.
+			// image loader
 			{
 				test: /\.(png|jpg|gif|svg|ico)$/,
 				use: 'file-loader'
@@ -163,7 +153,6 @@ module.exports = {
 		// }),
 		new webpack.HotModuleReplacementPlugin(),
 		// new BundleAnalyzerPlugin(),
-		// maybe more at the end...
 	],
 	optimization: {
 		noEmitOnErrors: true,
@@ -200,11 +189,19 @@ if (config.get('code.validation.stylelint.live')) {
 	);
 }
 
-// filter disabled rules
-// webpack doesn't know disabled flag so it needs to be removed before the config can be used
-module.exports.module.rules = module.exports.module.rules
-	.filter((rule) => rule._disabled !== true)
-	.map((rule) => {
-		delete rule._disabled;
-		return rule;
-	});
+if (config.get('code.validation.eslint.live')) {
+	module.exports.module.rules.push(
+		{
+			enforce: 'pre',
+			test: /\.js$/,
+			exclude: /node_modules/,
+			use: {
+				loader: 'eslint-loader',
+				options: {
+					cache: true,
+					// formatter: require('eslint-friendly-formatter'),
+				},
+			},
+		},
+	);
+}

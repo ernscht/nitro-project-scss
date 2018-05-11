@@ -14,7 +14,6 @@ const banner = `${bannerData.pkg.name}
 	@date ${bannerData.date}`;
 
 module.exports = {
-	mode: 'production',
 	devtool: 'source-map',
 	context: path.resolve(__dirname, '../../'),
 	entry: {
@@ -37,6 +36,7 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							sourceMap: true,
+							importLoaders: 2,
 						}
 					},
 					{
@@ -107,8 +107,7 @@ module.exports = {
 			{
 				test: /\.(png|jpg|gif|svg)$/,
 				loader: 'img-loader',
-				// Specify enforce: 'pre' to apply the loader
-				// before url-loader
+				// Specify enforce: 'pre' to apply the loader before url-loader
 				enforce: 'pre',
 				options: {
 					plugins: [

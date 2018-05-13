@@ -3,8 +3,8 @@
 const gulp = require('gulp');
 const getTask = require('./config/gulp/utils').getTask;
 const gulpSequence = require('gulp-sequence').use(gulp);
-// const config = require('config');
-// require('nitro-exporter')(gulp, config);
+const config = require('config');
+require('nitro-exporter')(gulp, config);
 
 gulp.task('minify-img', getTask('minify-img'));
 gulp.task('svg-sprite', getTask('svg-sprite'));

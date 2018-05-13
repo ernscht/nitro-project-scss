@@ -9318,9 +9318,9 @@ nice-try@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"
 
-nitro-exporter@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/nitro-exporter/-/nitro-exporter-1.0.0.tgz#cad5b755242be9978171c80177116ffaf2465449"
+nitro-exporter@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/nitro-exporter/-/nitro-exporter-1.0.1.tgz#66b7bcb3d922e87be3397f3c0f0854842b354787"
   dependencies:
     array-unique "0.3.2"
     del "3.0.0"

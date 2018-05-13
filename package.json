@@ -10,8 +10,7 @@
     "npm": ">=5 <6"
   },
   "scripts": {
-    "create-pattern": "yo nitro:pattern",
-    "nitro:pattern": "yarn create-pattern",
+    "nitro:pattern": "yo nitro:pattern",
     "nitro:update": "yarn add generator-nitro --exact && yo nitro",
     "lint": "npm-run-all lint:*",
     "lint:accessibility": "gulp lint-accessibility",
@@ -68,7 +67,7 @@
     "@namics/eslint-config": "5.0.1",
     "@namics/stylelint-bem": "5.1.0",
     "ajv": "6.5.0",
-    "autoprefixer": "8.4.1",
+    "autoprefixer": "8.5.0",
     "backstopjs": "3.2.16",
     "body-parser": "1.18.2",
     "browser-sync": "2.24.4",
@@ -131,11 +130,11 @@
 
     "rimraf": "2.6.2",
 
-    "webpack": "4.8.1",
+    "webpack": "4.8.3",
     "webpack-cli": "2.1.3",
     "webpack-dev-middleware": "3.1.3",
-    "webpack-hot-middleware": "2.22.1",
-    "webpack-bundle-analyzer": "2.11.2",
+    "webpack-hot-middleware": "2.22.2",
+    "webpack-bundle-analyzer": "2.11.3",
 
     "mini-css-extract-plugin": "0.4.0",
     "sass-loader": "7.0.1",

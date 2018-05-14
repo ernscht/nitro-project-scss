@@ -34,14 +34,14 @@ module.exports = {
 						loader: 'style-loader',
 						options: {
 							sourceMap: true,
-						}
+						},
 					},
 					{
 						loader: 'css-loader',
 						options: {
 							sourceMap: true,
 							importLoaders: 2,
-						}
+						},
 					},
 					{
 						loader: 'postcss-loader',
@@ -54,11 +54,6 @@ module.exports = {
 									require('autoprefixer'),
 								];
 							},
-
-							// plugins: (loader) => [
-							// 	require('autoprefixer'),
-							// 	new IconfontWebpackPlugin(loader),
-							// ],
 							sourceMap: true,
 						}
 					},
@@ -68,7 +63,7 @@ module.exports = {
 							sourceMap: true,
 						},
 					},
-				]
+				],
 			},
 			// styles (MiniCSSExtract Plugin)
 			// {
@@ -131,18 +126,18 @@ module.exports = {
 						// knownHelpers: [],
 						// runtime: '',
 						// partialDirs: ''
-					}
-				}
+					},
+				},
 			},
 			// woff fonts (for example, in CSS files)
 			{
 				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
-				use: 'file-loader'
+				use: 'file-loader',
 			},
 			// image loader
 			{
 				test: /\.(png|jpg|gif|svg|ico)$/,
-				use: 'file-loader'
+				use: 'file-loader',
 			},
 		],
 	},

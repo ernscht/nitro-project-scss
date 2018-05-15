@@ -1,5 +1,7 @@
 'use strict';
 
+import * as T from 'terrific';
+
 describe('image module', () => {
 	let mod;
 

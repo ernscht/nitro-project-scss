@@ -3,15 +3,22 @@ const webpack = require('webpack');
 // const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const gitRevisionPlugin = new GitRevisionPlugin({ branch: true });
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-// const pkg = require('../../package.json');
+
 const bannerData = {
 	date: new Date().toISOString().slice(0, 19),
 	pkg: require('../../package.json'),
+	git: {
+		branch: gitRevisionPlugin.branch(),
+		version: gitRevisionPlugin.version(),
+	},
 };
 const banner = `${bannerData.pkg.name}
 	@version v${bannerData.pkg.version}
-	@date ${bannerData.date}`;
+	@date ${bannerData.date}
+	@source ${bannerData.git.branch}|${bannerData.git.version}`;
 
 module.exports = {
 	devtool: 'source-map',
@@ -100,7 +107,7 @@ module.exports = {
 				test: /.(woff(2)?)(\?[a-z0-9]+)?$/,
 				loader: 'file-loader',
 				options: {
-					name: 'fonts/[name].[ext]?[hash]',
+					name: 'media/fonts/[name]-[hash:7].[ext]',
 				},
 			},
 			// image loader & minification
@@ -142,7 +149,7 @@ module.exports = {
 				loader: 'url-loader',
 				options: {
 					limit: 3 * 1028,
-					name: 'media/[ext]/[name]-[hash].[ext]',
+					name: 'media/[ext]/[name]-[hash:7].[ext]',
 				},
 			},
 		],

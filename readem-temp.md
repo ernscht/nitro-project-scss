@@ -18,7 +18,7 @@ Introduction …
 
 ### prio 3 (after launch)
 
-* sourcemaps for production?
+* sourcemaps for production? (https://github.com/webpack-contrib/mini-css-extract-plugin/issues/141)
 * enable hot module reloading with `mini-css-extract-plugin` when ready
 * eslint should lint only changed files
 * use "gondel"

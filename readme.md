@@ -12,8 +12,8 @@ Introduction …
 
 * how to handle eslint error concerning `module` not defined
 * lerna compatibility of babel-loader with excludes
-* pattern blueprint
-* use husky v1 for git githooks
+* what to do with malfunctioning iconfont feature?
+* use husky v1 for githooks when ready
 * documentation
 
 ### prio 3 (after launch)

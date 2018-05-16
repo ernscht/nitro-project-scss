@@ -172,8 +172,6 @@ module.exports = {
 if (config.get('code.validation.stylelint.live')) {
 	module.exports.plugins.push(
 		new StyleLintPlugin({
-			configFile: './.stylelintrc',
-			ignorePath: './.stylelintignore',
 			files: ['src/**/*.?(s)css'],
 			// lintDirtyModulesOnly: true,
 			syntax: 'scss',

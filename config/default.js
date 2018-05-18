@@ -49,7 +49,12 @@ const defaultConfig = {
 			middlewareOptions: {
 				ignoreRoutes: ['api/', 'assets/', 'dist/', 'content/'],
 			}
-		}
+		},
+		dumpViews: {
+			// filter corrupt, incomplete or irrelevant views
+			// example:
+			// viewFilter: (url) => url !== 'incomplete',
+		},
 	},
 	exporter: require('./default/exporter'),
 };

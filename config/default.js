@@ -55,6 +55,16 @@ const defaultConfig = {
 			// example:
 			// viewFilter: (url) => url !== 'incomplete',
 		},
+		svgSprite: {
+			// generates icon sprite with the name of the last folder in src
+			// src: 'src/patterns/atoms/icon/img/icons/*.svg',
+			// dest: 'public/assets/svg',
+		},
+		minifyImg: {
+			// copies and minifies all source images to dest folder
+			// src: 'src/shared/assets/img/**/*',
+			// dest: 'public/assets/img',
+		},
 	},
 	exporter: require('./default/exporter'),
 };

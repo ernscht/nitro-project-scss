@@ -1,12 +1,13 @@
 'use strict';
 
+const config = require('config');
 const pngquant = require('imagemin-pngquant');
 
 module.exports = (gulp, plugins) => {
 	return () => {
 		return gulp
-			.src('src/shared/assets/img/**/*')
-			.pipe(plugins.newer('public/assets/img'))
+			.src(config.get('feature.minifyImg.src'))
+			.pipe(plugins.newer(config.get('feature.minifyImg.dest')))
 			.pipe(
 				plugins.imagemin([
 					plugins.imagemin.gifsicle({ interlaced: true }),
@@ -23,6 +24,6 @@ module.exports = (gulp, plugins) => {
 					pngquant(),
 				])
 			)
-			.pipe(gulp.dest('public/assets/img'));
+			.pipe(gulp.dest(config.get('feature.minifyImg.dest')));
 	};
 };

@@ -6,8 +6,8 @@ const pngquant = require('imagemin-pngquant');
 module.exports = (gulp, plugins) => {
 	return () => {
 		return gulp
-			.src(config.get('feature.minifyImg.src'))
-			.pipe(plugins.newer(config.get('feature.minifyImg.dest')))
+			.src(config.get('gulp.minifyImg.src'))
+			.pipe(plugins.newer(config.get('gulp.minifyImg.dest')))
 			.pipe(
 				plugins.imagemin([
 					plugins.imagemin.gifsicle({ interlaced: true }),
@@ -24,6 +24,6 @@ module.exports = (gulp, plugins) => {
 					pngquant(),
 				])
 			)
-			.pipe(gulp.dest(config.get('feature.minifyImg.dest')));
+			.pipe(gulp.dest(config.get('gulp.minifyImg.dest')));
 	};
 };

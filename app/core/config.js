@@ -50,6 +50,34 @@ const defaultConfig = {
 		proxy: 8081,
 		production: process.env.NODE_ENV && process.env.NODE_ENV.replace((/\s/g), '') === 'production' ? true : false,
 	},
+	gulp: {
+		dumpViews: {
+			/*
+			 * used in gulp task `dump-views`
+			 * filter corrupt, incomplete or irrelevant views
+			 * with the function viewFilter
+			 *
+			 * example:
+			 * viewFilter: (url) => url !== 'incomplete',
+			 */
+		},
+		svgSprite: {
+			/*
+			 * used in gulp task svg-sprite
+			 * generates icon sprite with the name of the last folder in src
+			 */
+			src: 'src/patterns/atoms/icon/img/icons/*.svg',
+			dest: 'public/assets/svg',
+		},
+		minifyImg: {
+			/*
+			 * used in gulp task minify-img
+			 * copies and minifies all source images to dest folder
+			 */
+			src: 'src/shared/assets/img/**/*',
+			dest: 'public/assets/img',
+		},
+	},
 	feature: {
 		i18next: {
 			/*
@@ -77,32 +105,6 @@ const defaultConfig = {
 			middlewareOptions: {
 				ignoreRoutes: ['api/', 'assets/', 'dist/', 'proto/'],
 			},
-		},
-		dumpViews: {
-			/*
-			 * used in gulp task `dump-views`
-			 * filter corrupt, incomplete or irrelevant views
-			 * with the function viewFilter
-			 *
-			 * example:
-			 * viewFilter: (url) => url !== 'incomplete',
-			 */
-		},
-		svgSprite: {
-			/*
-			 * used in gulp task svg-sprite
-			 * generates icon sprite with the name of the last folder in src
-			 */
-			src: 'src/patterns/atoms/icon/img/icons/*.svg',
-			dest: 'public/assets/svg',
-		},
-		minifyImg: {
-			/*
-			 * used in gulp task minify-img
-			 * copies and minifies all source images to dest folder
-			 */
-			src: 'src/shared/assets/img/**/*',
-			dest: 'public/assets/img',
 		},
 	},
 };

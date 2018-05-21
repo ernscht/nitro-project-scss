@@ -4,19 +4,25 @@ const express = require('express');
 const app = express();
 const config = require('config');
 const router = require('./app/core/router');
-const hbs = require('./app/templating/hbs/engine');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 
 const isProduction = config.get('server.production');
+const isTwig = config.get('nitro.templateEngine') === 'twig';
+let engine;
 
 // webpack
 if (!isProduction) {
 	require('./app/core/webpack')(app);
 }
 
-// partials
-require('./app/templating/hbs/partials')(hbs);
+if (isTwig) {
+	engine = require('./app/templating/twig/engine');
+	engine.cache(false);
+} else {
+	engine = require('./app/templating/hbs/engine');
+	require('./app/templating/hbs/partials')(engine);
+}
 
 // compress all requests
 app.use(compression());
@@ -31,6 +37,11 @@ app.use(router);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', config.get('nitro.viewFileExtension'));
 app.set('views', config.get('nitro.basePath') + config.get('nitro.viewDirectory'));
-app.engine(config.get('nitro.viewFileExtension'), hbs.__express);
+
+if (isTwig) {
+	app.engine(config.get('nitro.viewFileExtension'), engine.renderWithLayout);
+} else {
+	app.engine(config.get('nitro.viewFileExtension'), engine.__express);
+}
 
 require('./app/core/listen')(app);

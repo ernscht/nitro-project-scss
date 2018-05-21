@@ -16,6 +16,7 @@ const defaultConfig = {
 		placeholdersDirectory: 'src/views/_placeholders',
 		defaultLayout: 'default',
 		tmpDirectory: 'project/tmp',
+		templateEngine: 'hbs',
 		mode: {
 			livereload: true,
 			offline: false,
